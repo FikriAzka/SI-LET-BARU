@@ -11,6 +11,7 @@ use Illuminate\Routing\RouteUrlGenerator;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\KaprodiController;
 use App\Http\Controllers\AkademikController;
+use App\Http\Controllers\IRSController;
 use App\Http\Controllers\MahasiswaController;
 
 Route::middleware(["guest"])->group(function () {
@@ -29,6 +30,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/lihatIRS-mahasiswa', [MahasiswaController::class, "lihatIRS_mahasiswa"]) -> name('mahasiswa.lihatIRS');
     Route::get('/lihatKHS-mahasiswa', [MahasiswaController::class, "lihatKHS_mahasiswa"]) -> name('mahasiswa.lihatKHS');
     Route::get('/buatIRS-mahasiswa', [MahasiswaController::class, "buatIRS_mahasiswa"]) -> name('mahasiswa.buatIRS');
+    Route::get('/irs/create', [IRSController::class, 'create'])->name('irs.create');
+    Route::post('/irs', [IRSController::class, 'store'])->name('irs.store');
     Route::get("/jadwalkuliah-mahasiswa", [MahasiswaController::class, "jadwalkuliah_mahasiswa"]) -> name('mahasiswa.jadwalkuliah');
     Route::get('/transkrip-mahasiswa', [MahasiswaController::class, "transkrip_mahasiswa"]);
 
