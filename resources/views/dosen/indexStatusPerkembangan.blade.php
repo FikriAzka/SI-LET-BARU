@@ -1,3 +1,7 @@
+@extends('layout')
+@section('konten')
+
+@endsection
 <!DOCTYPE html>
 <html lang="en">
 <head>

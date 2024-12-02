@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('konten')
-@section('konten')
+
     <div class="p-4 flex justify-start">
         <a class="text-gray-600 text-sm" href="/dashboard-akademik">← Back</a>
     </div>
@@ -72,7 +72,7 @@
                             <td class="p-2 text-center">
                                 <div class="flex justify-center space-x-2">
                                     <button onclick="openEditModal({{ json_encode($ruangan) }})"
-                                        class="bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600">
+                                        class="bg-yellow-500 text-white px-2 py-1 rounded-lg hover:bg-yellow-600">
                                         Edit
                                     </button>
                                     <form action="{{ route('ruangan.destroy', $ruangan->id) }}" method="POST"
@@ -80,7 +80,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
-                                            class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600">
+                                            class="bg-red-500 text-white px-2 py-1 rounded-lg hover:bg-red-600">
                                             Hapus
                                         </button>
                                     </form>
