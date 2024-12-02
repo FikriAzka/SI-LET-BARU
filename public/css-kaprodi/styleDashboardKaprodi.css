@@ -1,0 +1,184 @@
+* {
+  text-decoration: none;
+}
+
+body {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  position: 100vh;
+  min-height: 1000px;
+  background-position: center center;
+  justify-content: center;
+}
+
+.navbar-start {
+  display: flex;
+  position: fixed;
+  justify-content: space-between;
+  background-color: #9bc0c0;
+  border-bottom: #9bc0c0;
+  height: 100px;
+  align-items: center;
+  width: 100%;
+  padding: 0 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.navbar-start .logo-header {
+  display: flex;
+  align-items: center;
+  margin-top: 0px;
+}
+
+.navbar-start .logo-subtitle {
+  color: black;
+  margin-top: -35px;
+  font-size: 16px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.navbar-start .logo-text {
+  color: black;
+  margin: 0;
+  margin-top: -30px;
+  margin-left: -10px;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+}
+
+.logo-text span {
+  font-size: 30px;
+  color: black;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.logo-subtitle {
+  margin: 0;
+}
+
+/* Dashboard*/
+
+.navbar-start .navbar-home {
+  font-size: 36px;
+  color: black;
+  margin-top: -35px;
+  margin-left: -290px;
+  font-weight: 200;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.navbar-start .logo-header .logo-silet img {
+  margin-right: 10px;
+  margin-left: -10px;
+  width: 120px;
+  height: 120px;
+}
+
+.navbar-start div {
+  margin-top: 35px;
+  padding-right: 35px;
+}
+
+.navbar-start .user-logo img {
+  width: 48px;
+  height: auto;
+  margin-bottom: 35px;
+}
+
+.navbar-start .menu-button img {
+  width: 55px;
+  height: auto;
+  margin-bottom: 35px;
+}
+
+.profile-container {
+  align-items: center;
+  border: 1px solid black;
+  display: flex;
+  width: 450px;
+  margin-left: 535px;
+  height: 200px;
+  margin-top: 150px;
+  position: cover;
+  flex-direction: row;
+  border-radius: 15px;
+  justify-content: center;
+  align-self: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.profile-container .user-details {
+  line-height: 0.7;
+}
+
+.profile-container .user-details .nama {
+  font-weight: 700;
+}
+
+.profile-container .user-profile img {
+  width: 100px;
+  height: auto;
+  margin-right: 20px;
+
+}
+
+.fitur-dashboard {
+  flex-direction: row;
+  gap: 60px;
+  display: flex;
+  position: cover;
+  justify-self: center;
+  margin-top: 100px;
+  margin-left: 45px;
+  justify-content: center;
+}
+
+
+.fitur-dashboard .PenjadwalanMataKuliah-container h3 {
+    width: 400px;
+    height: 100px;
+    text-align: center;
+    border: 1px solid black;
+    background: linear-gradient(to right, #9bc0a5, #b5d1ba, #d5e4d3);
+    padding: 10px;
+    margin: 0;
+    font-family: "Roboto Mono";
+    font-weight: 550px;
+    letter-spacing: 5px;
+    font-size: 15px;
+    line-height:95px;
+    border-radius: 15px;
+    margin-left: 240px;
+
+
+}
+
+
+
+.fitur-dashboard .VerfikasiIRS-container h3 {
+    width: 400px;
+    height: 100px; 
+    margin-top: 70px;
+    text-align: center;
+    border: 1px solid black;
+    background: linear-gradient(to right, #8281c5, #a5a3d3, #c7c5e0);
+    margin-left: 45px;
+    border-radius: 15px;
+    padding: 10px;
+    margin-top: 0;
+    font-family: "Roboto Mono";
+    font-weight: 550;
+    letter-spacing: 5px;
+    font-size: 20px;
+    line-height:95px;
+}

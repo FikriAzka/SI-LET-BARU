@@ -1,0 +1,137 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-image: url(../assets/background.jpg);
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-position: center center;
+    height: 100vh;
+    backdrop-filter: blur(2px);
+}
+
+.logo img {
+    margin-top: -70px;
+    width: 130px;
+    height: auto;
+}
+
+.header {
+    margin-top: -10px;
+    margin-bottom: 10px;
+    font-size: x-large;
+}
+
+.username {
+    border-width: thin;
+    border-color: black;
+    width: 300px;
+    height: 40px;
+    background-color: white;
+    margin-top: 20px;
+    text-align: left;
+    margin-left: -20px;
+    background-image: url(../assets/user.png);
+    background-size: 20px;
+    background-position: 5px center;
+    background-repeat: no-repeat;
+    padding-left: 30px;
+}
+
+.password {
+    border-width: thin;
+    border-color: black;
+    width: 300px;
+    height: 40px;
+    background-color: white;
+    margin-top: 4px;
+    text-align: left;
+    margin-left: -20px;
+    background-image: url(../assets/key.png);
+    background-size: 18px;
+    background-position: 5px center;
+    background-repeat: no-repeat;
+    padding-left: 30px;
+}
+
+.login-button {
+    width: 300px;
+    height: 32px;
+    border-width: thin;
+    background-color: white;
+    border-color: #1252f5;
+    color: #1252f5;
+    margin-left: -20px;
+    margin-top: 20px;
+}
+
+.login-button:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #335bc2;
+    transition-duration: 0.3;
+}
+
+.container {
+    background-color: white;
+    text-align: center;
+    width: 400px;
+    height: 470px;
+    padding: 70px;
+    border-radius: 10px;
+}
+
+.daftar-reset {
+    text-align: center;
+}
+
+.daftar-reset .daftar-sekarang {
+    color: #f50b0b;
+    font-size: xx-small;
+    margin-right: 60px;
+}
+
+.daftar-reset .reset-password {
+    color: #1252f5;
+    font-size: xx-small;
+    margin-left: 60px;
+}
+
+.form-select {
+    border-width: thin;
+    border-color: black;
+    width: 300px;
+    height: 40px;
+    background-color: white;
+    margin-top: 20px;
+    text-align: left;
+    margin-left: -20px;
+    padding-left: 10px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url(../assets/arrow-down.png); /* You can create a custom dropdown icon */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: #1252f5;
+}
+
+.alert-danger {
+    color: #f50b0b;
+    font-size: small;
+    margin-top: 10px;
+    margin-left: -20px;
+    width: 300px;
+    text-align: center;
+}

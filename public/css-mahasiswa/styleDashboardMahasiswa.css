@@ -1,0 +1,271 @@
+* {
+    text-decoration: none;
+  }
+  
+  body {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: 100vh;
+    min-height: 1000px;
+    background-position: center center;
+    justify-content: center;
+  }
+  
+  .navbar-start {
+    display: flex;
+    position: fixed;
+    justify-content: space-between;
+    background-color: #9bc0c0;
+    border-bottom: #9bc0c0;
+    height: 100px;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  .navbar-start .logo-header {
+    display: flex;
+    align-items: center;
+    margin-top: 0px;
+  }
+  
+  .navbar-start .logo-subtitle {
+    color: black;
+    margin-top: -35px;
+    font-size: 16px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+  }
+  
+  .navbar-start .logo-text {
+    color: black;
+    margin: 0;
+    margin-top: -30px;
+    margin-left: -10px;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+  }
+  
+  .logo-text span {
+    font-size: 30px;
+    color: black;
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+  }
+  
+  .logo-subtitle {
+    margin: 0;
+  }
+  
+  /* Dashboard*/
+  
+  .navbar-start .navbar-home {
+    font-size: 36px;
+    color: black;
+    margin-top: -35px;
+    margin-left: -290px;
+    font-weight: 200;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+  
+  .navbar-start .logo-header .logo-silet img {
+    margin-right: 10px;
+    margin-left: -10px;
+    width: 120px;
+    height: 120px;
+  }
+  
+  .navbar-start div {
+    margin-top: 35px;
+    padding-right: 35px;
+  }
+  
+  .navbar-start .user-logo img {
+    width: 48px;
+    height: auto;
+    margin-bottom: 35px;
+  }
+  
+  .navbar-start .menu-button img {
+    width: 55px;
+    height: auto;
+    margin-bottom: 35px;
+  }
+  
+  .profile-container {
+    display: flex;
+    border: 1px solid black;
+    width: 1300px;
+    margin-left: 100px;
+    height: 200px;
+    margin-top: 150px;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 15px;
+    font-family: "Poppins", sans-serif;
+    justify-content: space-around;
+  }
+  
+  .user-details {
+    line-height: 1;
+    margin-right: -200px;
+    margin-left: -430px;
+  }
+
+  .infotambahan-container {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+    margin-bottom: 40px;
+    margin-right: 30px;
+  }
+
+  .infotambahan {
+    text-align: center;
+    width: auto; /* Menghapus fixed width agar elemen mengikuti konten */
+    margin-bottom: -80px;
+    margin-right: -300px; 
+    margin-left: 120px;
+    margin-top: -5px;/* Menambahkan jarak horizontal kecil antara elemen */
+  }
+  
+  .infotambahan .sks, .infotambahan .smt, .infotambahan .ips {
+    font-weight: 700;
+  }
+
+  .profile-container .user-details .nama {
+    font-weight: 700;
+  }
+  
+  .infotambahan .sks, .infotambahan .smt, .infotambahan .ipk {
+    font-weight: 700;
+  }
+  
+  .profile-container .user-profile img {
+    width: 100px;
+    height: auto;
+    flex-direction: row;
+    margin-left: -150px;
+    
+  } 
+  
+  .fitur-dashboard {
+    flex-direction: row;
+    gap: 40px;
+    display: flex;
+    position: cover;
+    justify-self: center;
+    margin-top: 100px;
+    margin-left: 45px;
+  }
+  
+  /* Container for status cards */
+.status-cards {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: -20px;
+  margin-right: -150px;
+}
+
+/* Style for each card */
+.status-card {
+  background-color: #ccc; /* Abu-abu */
+  width: 200px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for title in each card */
+.status-card .title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+}
+
+/* Style for subtitle in each card */
+.status-card .subtitle {
+  font-size: 14px;
+  font-weight: 300;
+  color: #666;
+  margin-top: 5px;
+}
+
+/* Style for icon (optional) */
+.status-card .icon {
+  font-size: 24px;
+  color: #333;
+}
+
+  .fitur-dashboard .registrasi-container h3 {
+    width: 400px;
+    height: 100px;
+    text-align: center;
+    border: 1px solid black;
+    background: linear-gradient(to right, #9bc0a5, #b5d1ba, #d5e4d3);
+    padding: 10px;
+    margin: 0;
+    font-family: "Roboto Mono";
+    font-weight: 550;
+    letter-spacing: 5px;
+    font-size: 20px;
+    line-height:95px;
+    border-radius: 15px;
+  }
+   
+  
+  .fitur-dashboard .akademik-container h3 {
+    width: 400px;
+    height: 100px; 
+    margin-top: 70px;
+    text-align: center;
+    border: 1px solid black;
+    background: linear-gradient(to right, #8281c5, #a5a3d3, #c7c5e0);
+    margin-left: 45px;
+    border-radius: 15px;
+    padding: 10px;
+    margin-top: 0;
+    font-family: "Roboto Mono";
+    font-weight: 550;
+    letter-spacing: 5px;
+    font-size: 20px;
+    line-height:95px;
+  }
+  
+  
+  
+  .fitur-dashboard .jadwalkuliah-container h3 {
+    width: 400px;
+    height: 100px; 
+    margin-top: 50px;
+    margin-left: 45px;  
+    text-align: center;
+    border: 1px solid black;
+    background: linear-gradient(to right, #a59e78, #bfbba8, #d9d6c2);
+    padding: 10px;
+    border-radius: 15px;
+    margin-top: 0;
+    font-family: "Roboto Mono";
+    font-weight: 550;
+    letter-spacing: 5px;
+    font-size: 20px;
+    line-height:95px;
+  }
+  
+  
+  

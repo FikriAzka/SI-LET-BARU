@@ -1,0 +1,206 @@
+* {
+    text-decoration: none;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: 100vh;
+    min-height: 1000px;
+    background-position: center center;
+    justify-content: center;
+    font-family: "Poppins", sans-serif;
+}
+
+.navbar-start {
+    display: flex;
+    position: fixed;
+    justify-content: space-between;
+    background-color: #9bc0c0;
+    border-bottom: #9bc0c0;
+    height: 100px;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+    font-family: "Poppins", sans-serif;
+}
+
+.navbar-start .logo-header {
+    display: flex;
+    align-items: center;
+    margin-top: 0px;
+}
+
+.navbar-start .logo-subtitle {
+    color: black;
+    margin-top: -35px;
+    font-size: 16px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+}
+
+.navbar-start .logo-text {
+    color: black;
+    margin: 0;
+    margin-top: -30px;
+    margin-left: -10px;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+}
+
+.logo-text span {
+    font-size: 30px;
+    color: black;
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.logo-subtitle {
+    margin: 0;
+}
+
+.navbar-start .navbar-home {
+    font-size: 36px;
+    color: black;
+    margin-top: -35px;
+    margin-left: -290px;
+    font-weight: 200;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.navbar-start .logo-header .logo-silet img {
+    margin-right: 10px;
+    margin-left: -10px;
+    width: 120px;
+    height: 120px;
+}
+
+.navbar-start div {
+    margin-top: 35px;
+    padding-right: 35px;
+}
+
+.navbar-start .user-logo img {
+    width: 48px;
+    height: auto;
+    margin-bottom: 35px;
+}
+
+.navbar-start .menu-button img {
+    width: 55px;
+    height: auto;
+    margin-bottom: 35px;
+}
+
+/* Back Button */
+.back-button {
+    margin-top: 90px;
+    padding: 15px;
+}
+
+.back-button a {
+
+    color: black;
+    font-size: 18px;
+}
+
+/* Main Content */
+.main-content {
+    margin-top: -10px;
+    margin-left: 300px;
+    padding: 20px;
+    max-width: 1200px;
+
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.registration-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.option-card {
+    flex: 1;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: #f9f7f7;
+}
+
+.option-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+}
+
+.status-badge {
+    padding: 5px 15px;
+    border-radius: 20px;
+    color: white;
+    font-weight: 500;
+    margin-top: 15px;
+}
+
+.aktif {
+    background-color: #2ecc71;
+}
+
+.cuti {
+    background-color: #e74c3c;
+}
+
+.info-section {
+    margin-top: 40px;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #f9f7f7;
+}
+
+.info-column {
+    flex: 1;
+    padding: 0 20px;
+}
+
+.info-column h2 {
+    margin-bottom: 20px;
+}
+
+.info-column ul {   
+    list-style-type: none;
+    padding: 0;
+}
+
+.info-column li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.info-column li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+}

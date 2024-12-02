@@ -1,0 +1,176 @@
+* {
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+/* Your provided navbar styles */
+.navbar-start {
+    display: flex;
+    position: fixed;
+    justify-content: space-between;
+    background-color: #9bc0c0;
+    border-bottom: #9bc0c0;
+    height: 100px;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+    font-family: "Poppins", sans-serif;
+    z-index: 1000;
+}
+
+.navbar-start .logo-header {
+    display: flex;
+    align-items: center;
+    margin-top: 0px;
+}
+
+.navbar-start .logo-subtitle {
+    color: black;
+    margin-top: -35px;
+    font-size: 16px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+}
+
+.navbar-start .logo-text {
+    color: black;
+    margin: 0;
+    margin-top: -30px;
+    margin-left: -10px;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+}
+
+.logo-text span {
+    font-size: 30px;
+    color: black;
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.logo-subtitle {
+    margin: 0;
+}
+
+.navbar-start .navbar-home {
+    font-size: 36px;
+    color: black;
+    margin-top: -35px;
+    margin-left: -290px;
+    font-weight: 200;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.navbar-start .logo-header .logo-silet img {
+    margin-right: 10px;
+    margin-left: -10px;
+    width: 120px;
+    height: 120px;
+}
+
+.navbar-start div {
+    margin-top: 35px;
+    padding-right: 35px;
+}
+
+.navbar-start .user-logo img {
+    width: 50px;
+    height: auto;
+    margin-bottom: 40px;
+}
+
+.navbar-start .menu-button img {
+    width: 55px;
+    height: auto;
+    margin-bottom: 40px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+    background-color: #f5f5f5;
+}
+
+/* Main content styles */
+.main-content {
+    margin-top: 100px; /* Reduced from 120px */
+    padding: 0 10px; /* Reduced side padding */
+    width: 100%;
+}
+
+.content-container {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 0 10px; /* Reduced side margins */
+    background-color: white;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-select {
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: "Poppins", sans-serif;
+}
+
+.placeholder-text {
+    text-align: center;
+    color: #666;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    font-style: italic;
+}
+
+.back-button {
+    text-decoration: none;
+    color: #000;
+    display: inline-flex;
+    align-items: center;
+    margin: -10px 0 20px 10px; /* Adjusted margin to move up */
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+}
+
+.back-button:before {
+    content: "←";
+    margin-right: 8px;
+}
+
+/* Added wrapper for proper spacing */
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 20px; /* Added space at top */
+}
