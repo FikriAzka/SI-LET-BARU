@@ -11,7 +11,7 @@
 
 @section('konten')
     <div class="container mx-auto">
-        <a class="text-gray-600 text-sm mb-4 inline-block" href="dashboard-kaprodi">
+        <a class="text-gray-600 text-sm mb-4 ml-5 mt-5 inline-block" href="dashboard-kaprodi">
             ← Back
         </a>
         <div class="flex overflow-hidden">
@@ -20,13 +20,71 @@
                 <div class="p-6 mt-4 mx-6 bg-white border border-gray-200 rounded-3xl shadow-sm">
                     <div class="flex justify-between items-center">
                         <h1 class="text-black font-bold">Penyusunan Jadwal Kuliah</h1>
+                        <!-- Tombol Tambah Mata Kuliah -->
+                        <button onclick="openCreateModal()" class="bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-800 transition duration-300">
+                            + Tambah Mata Kuliah
+                        </button>
                         <!-- Tombol Tambah Jadwal -->
                         <button onclick="location.href='{{ route('jadwal.create') }}'"
                             class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
                             + Tambah Jadwal
                         </button>
+                        
                     </div>
                 </div>
+                <div id="createModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 items-center justify-center z-50">
+                    <div class="bg-white p-6 rounded-lg w-full max-w-md">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-bold">Tambah Mata Kuliah</h2>
+                            <button class="text-gray-600 hover:text-gray-800" onclick="closeCreateModal()">✖</button>
+                        </div>
+                        <form action="{{ route('mata_kuliahs.store') }}" method="POST" class="mt-4">
+                            @csrf
+                            @if ($errors->any())
+                                <div class="bg-red-100 text-red-700 p-4 rounded-lg mb-4">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-bold">Kode Mata Kuliah:</label>
+                                    <input type="text" name="kode_mk" maxlength="10" class="w-full border rounded p-2 text-sm" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold">Nama Mata Kuliah:</label>
+                                    <input type="text" name="nama_mk" maxlength="50" class="w-full border rounded p-2 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold">Semester:</label>
+                                    <input type="number" name="semester" min="1" class="w-full border rounded p-2 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold">Sifat:</label>
+                                    <input type="text" name="sifat" maxlength="10" class="w-full border rounded p-2 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold">SKS:</label>
+                                    <input type="number" name="sks" min="1" max="10" class="w-full border rounded p-2 text-sm">
+                                </div>
+                            </div>
+                
+                            <div class="flex justify-end space-x-4 mt-4">
+                                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                                    Simpan
+                                </button>
+                                <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                                    onclick="closeCreateModal()">Batal</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                
 
                 <section
                     class="relative
@@ -142,4 +200,14 @@
     @section('js')
         <script src="https://cdn.jsdelivr.net/npm/pagedone@1.2.2/src/js/pagedone.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+        <script>
+            function openCreateModal() {
+                document.getElementById('createModal').classList.remove('hidden');
+            }
+        
+            function closeCreateModal() {
+                document.getElementById('createModal').classList.add('hidden');
+            }
+        </script>
+        
     @endsection

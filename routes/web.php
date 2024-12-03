@@ -13,6 +13,7 @@ use App\Http\Controllers\KaprodiController;
 use App\Http\Controllers\AkademikController;
 use App\Http\Controllers\IRSController;
 use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\MataKuliahController;
 
 Route::middleware(["guest"])->group(function () {
     Route::get("/", [SesiController::class,"loginpage"]) -> name('loginpage');
@@ -64,6 +65,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("/penyusunanjadwalkuliah-kaprodi2", [JadwalController::class, 'index']) -> name('kaprodi.penyusunanjadwalkuliah2');
     // Route::post('jadwal', [JadwalController::class, 'store'])->name('jadwal.store');
     // Route::post('jadwal/create', [JadwalController::class, 'create'])->name('jadwal.create');
+    Route::post('/mata-kuliahs/store', [MataKuliahController::class, 'store'])->name('mata_kuliahs.store');
+
 
     // Route::get('kalendar', [ScheduleController::class, 'index'])->name('kalendar.index');
     Route::get('jadwal/create', [JadwalController::class, 'create'])->name('jadwal.create');
