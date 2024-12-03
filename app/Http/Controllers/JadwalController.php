@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class JadwalController extends Controller
-{public function buatIRS_mahasiswa()
+{   
+    public function buatIRS_mahasiswa()
     {
        $mahasiswa = Auth::user()->mahasiswa;
        $semester = $mahasiswa->semester;
@@ -39,7 +40,15 @@ class JadwalController extends Controller
 
 
    // Other methods remain the same...
-
+   public function index()
+   {
+       $jadwals = Jadwal::with(['mataKuliah', 'dosen'])->get();
+       $schedules = DB::table('jadwals')
+                   ->join('mata_kuliahs', 'jadwals.mata_kuliah_id', '=', 'mata_kuliahs.id')
+                   ->select('jadwals.*', 'mata_kuliahs.nama_mk')
+                   ->get();
+       return view('kaprodi.IndexPenyusunanJadwalKuliah2', compact('jadwals'));
+   }
    public function create()
    {
        $dosens = Dosen::all();
@@ -109,4 +118,78 @@ class JadwalController extends Controller
        list($hours, $minutes) = explode(':', $time);
        return $hours * 60 + $minutes;
    }
+   public function edit($id)
+    {
+        $jadwal = Jadwal::findOrFail($id);
+        $mataKuliahs = MataKuliah::all();
+        $dosens = Dosen::all();
+        $ruangs = Ruang::all();
+
+        return view('kalendar.create', compact('jadwal', 'mataKuliahs', 'dosens', 'ruangs'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'mata_kuliah_id' => 'required',
+            'dosen_id' => 'required',
+            'ruangan' => 'required',
+            'hari' => 'required',
+            'jam_mulai' => 'required',
+            'jam_selesai' => 'required',
+            'kelas' => 'required',
+            'kuota_kelas' => 'required|integer',
+            'sks' => 'required|integer',
+            'sifat' => 'required',
+            'semester' => 'required|integer',
+        ]);
+
+        $jadwal = Jadwal::findOrFail($id);
+        $jadwal->update($request->all());
+
+        return redirect()->route('kaprodi.penyusunanjadwalkuliah2')->with('success', 'Jadwal berhasil diperbarui!');
+    }
+
+    public function destroy($id)
+    {
+
+        $jadwal = Jadwal::findOrFail($id);
+
+        // Kembalikan status ruangan menjadi "Tersedia"
+        // $ruang = Ruang::where('noruang', $jadwal->ruangan)->first();
+        // if ($ruang) {
+        //     $ruang->update(['keterangan' => 'Tersedia']);
+        // }
+
+        $jadwal->delete();
+
+        return redirect()->route('kaprodi.penyusunanjadwalkuliah2')->with('success', 'Jadwal berhasil dihapus.');
+    }
+
+    public function showJadwalPenyetujuan()
+    {
+        // Ambil semua jadwal yang membutuhkan persetujuan (status bisa diubah sesuai kebutuhan)
+        $jadwals = Jadwal::where('status', 'pending')->get();
+
+        return view('dekan.indexPenyetujuanJadwalKuliah', compact('jadwals'));
+    }
+
+
+    public function approveJadwal($id)
+    {
+        $jadwal = Jadwal::findOrFail($id);
+        $jadwal->status = 'Disetujui'; // Sesuaikan dengan status yang sesuai
+        $jadwal->save();
+
+        return redirect()->route('dekan.penyetujuanjadwalkuliah')->with('success', 'Jadwal disetujui!');
+    }
+
+    public function rejectJadwal($id)
+    {
+        $jadwal = Jadwal::findOrFail($id);
+        $jadwal->status = 'rejected'; // Sesuaikan dengan status yang sesuai
+        $jadwal->save();
+
+        return redirect()->route('dekan.penyetujuanjadwalkuliah')->with('error', 'Jadwal ditolak!');
+    }
 }
