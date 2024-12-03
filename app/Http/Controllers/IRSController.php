@@ -44,8 +44,7 @@ class IRSController extends Controller
         $irs->status = false; // Belum disetujui
         $irs->tanggal_pengajuan = Carbon::now();
         $irs->mahasiswa_id = $mahasiswa->id;
-
-        // Menyimpan IRS ke database
+        
         $irs->save();
 
         return redirect()->route('irs.create')->with('success', 'IRS berhasil diajukan');

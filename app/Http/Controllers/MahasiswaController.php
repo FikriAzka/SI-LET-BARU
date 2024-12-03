@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Jadwal;
+use App\Models\MataKuliah;
 use Illuminate\Http\Request;
-use Illuminate\Suppor\Facades\Auth;
+use Illuminate\Support\Facades\Auth;
 
 class MahasiswaController extends Controller
 {
@@ -25,10 +26,13 @@ class MahasiswaController extends Controller
     function lihatKHS_mahasiswa(){
         return view('mahasiswa/indexlihatKHSMahasiswa');
     }
-    function buatIRS_mahasiswa(){
-        return view('mahasiswa/indexbuatIRSMahasiswa');
+    public function buatIRS_mahasiswa()
+    {
+        $jadwals = Jadwal::with(['mataKuliah', 'dosen'])->get();
+        $mataKuliahs = MataKuliah::all();
+        
+        return view('mahasiswa.indexbuatIRSMahasiswa', compact('jadwals', 'mataKuliahs'));
     }
-
     function jadwalkuliah_mahasiswa(){
         return view('mahasiswa/indexJadwalKuliahMahasiswa');
     }
