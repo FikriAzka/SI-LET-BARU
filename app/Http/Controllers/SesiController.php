@@ -21,7 +21,7 @@ class SesiController extends Controller
             }
             Auth::logout();
         }
-        // Mengirim userRoles sebagai null untuk form login awal
+        
         $userRoles = null;
         return view('indexLoginPage', compact('userRoles'));
     }
@@ -56,7 +56,6 @@ class SesiController extends Controller
                 return $this->redirectToDashboard($userRoles->first()->role_id);
             }
 
-            // Jika memiliki multiple role, tampilkan form pilihan
             return view('indexLoginPage', ['userRoles' => $userRoles]);
         }
 
