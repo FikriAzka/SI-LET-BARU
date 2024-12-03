@@ -32,4 +32,5 @@ class Mahasiswa extends Model
     {
         return $this->hasMany(Irs::class, 'mahasiswa_id', 'id');
     }
+
 }
