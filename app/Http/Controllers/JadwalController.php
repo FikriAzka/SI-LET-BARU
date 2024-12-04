@@ -17,19 +17,13 @@ class JadwalController extends Controller
         $mahasiswa = Auth::user()->mahasiswa;
         $semester = $mahasiswa->semester;
 
-        $jadwals = Jadwal::with(['mataKuliah', 'dosen'])
-            ->where('status', 'Disetujui')
-            ->whereHas('ruang', function ($query) {
-                $query->where('status', 'disetujui')
-                    ->where('keterangan', 'tersedia');
-            })
-            ->where('semester', $semester)
-            ->get();
-
+        $jadwals = Jadwal::where('semester', $semester)->where('status', 'Disetujui')->get();
         $mataKuliahs = MataKuliah::where('semester', $semester)->get();
-        $ruangs = Ruang::where('status', 'disetujui')
+        $ruangs = Ruang::where('status', 'Disetujui')
             ->where('keterangan', 'tersedia')
             ->get();
+
+        // dd($mataKuliahs);
 
         return view('mahasiswa.indexbuatIRSMahasiswa', compact('jadwals', 'mataKuliahs', 'mahasiswa', 'ruangs'));
     }
@@ -52,22 +46,28 @@ class JadwalController extends Controller
 
     public function store(Request $request)
     {
+
+        // dd($request->all());
         $validated = $request->validate([
             'mata_kuliah_id' => 'required|exists:mata_kuliahs,id',
             'dosen_id' => 'required|exists:dosens,id',
             'hari' => 'required|string|max:50',
             'ruangan' => 'required|string|max:10',
             'kuota_kelas' => 'required|integer',
-            'sks' => 'required|integer',
             'sifat' => 'required|string|max:15',
-            'kelas' => 'required|string|max:1',
-            'semester' => 'required|integer',
+            'kelas' => 'required|string|max:1', 
             'jam_mulai' => 'required|date_format:H:i',
             'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
             'pengampu_2' => 'nullable|string|max:50',
             'pengampu_3' => 'nullable|string|max:50',
             'status' => 'string|default:Pending',
         ]);
+
+        $matkul = MataKuliah::where('id',$request->mata_kuliah_id)->get()->first();
+        // dd($matkul);
+        $validated['sks'] = $matkul->sks;
+        $validated['semester'] = $matkul->semester;
+        // dd($validated);
 
         Jadwal::create($validated);
 
