@@ -55,7 +55,7 @@ class JadwalController extends Controller
        $ruangs = Ruang::all();
        $mataKuliahs = MataKuliah::all();
 
-       return view('kalendar.date', compact('dosens', 'ruangs', 'mataKuliahs'));
+       return view('kalendar.create', compact('dosens', 'ruangs', 'mataKuliahs'));
    }
 
    public function store(Request $request)

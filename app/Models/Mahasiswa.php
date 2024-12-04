@@ -8,6 +8,8 @@ class Mahasiswa extends Model
 {
     //
     protected $primaryKey = 'nim';
+   
+
     public function user()
     {
         return $this->belongsTo(User::class);
