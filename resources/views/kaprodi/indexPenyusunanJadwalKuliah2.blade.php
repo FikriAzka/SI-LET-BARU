@@ -65,13 +65,17 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-bold">Sifat:</label>
-                                    <input type="text" name="sifat" maxlength="10" class="w-full border rounded p-2 text-sm">
+                                    <select name="sifat" class="w-full border rounded p-2 text-sm" required>
+                                        <option value="Wajib">Wajib</option>
+                                        <option value="Pilihan">Pilihan</option>
+                                    </select>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-bold">SKS:</label>
                                     <input type="number" name="sks" min="1" max="10" class="w-full border rounded p-2 text-sm">
                                 </div>
                             </div>
+                            
                 
                             <div class="flex justify-end space-x-4 mt-4">
                                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
