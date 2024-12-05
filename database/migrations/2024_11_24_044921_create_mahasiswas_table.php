@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('mahasiswas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId(column: 'dos_wal_id')->constrained('dos_wals')->onDelete('cascade');
+            $table->foreignId( 'dos_wal_id')->constrained('dos_wals')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relasi ke tabel users
             $table->foreignId('fakultas_id')->constrained('fakultas')->cascadeOnDelete(); // Relasi ke fakultas
             $table->foreignId('jurusan')->constrained('program_studis')->cascadeOnDelete(); // Relasi ke program studi
@@ -23,8 +23,12 @@ return new class extends Migration
             $table->text('alamat')->nullable(); // Alamat mahasiswa
             $table->string('no_hp')->nullable(); // Nomor telepon
             $table->integer('semester');
+            $table->integer('total_sks');
+            $table->integer('sks'); // skss
+            $table->float('ipk');
+            $table->float('ips');
             $table->year('angkatan');
-            $table->integer('status')->default(0);
+            $table->enum('status', ['aktif', 'cuti']);
             $table->timestamps();
         });
     }
