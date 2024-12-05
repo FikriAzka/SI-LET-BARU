@@ -26,7 +26,7 @@ class DosWalDekSeeder extends Seeder
                 'nip' => '12321',
                 'nama_lengkap' => 'Aris Sujarto',
                 'jenis_kelamin' => 'L',
-                'fakultas_id' => 1,
+                'fakultas_id' => 2,
                 
             ],
             [
