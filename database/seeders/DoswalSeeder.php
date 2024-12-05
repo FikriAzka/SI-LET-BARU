@@ -24,6 +24,7 @@ class DoswalSeeder extends Seeder
                 'nip' => '12345',
                 'nama_lengkap' => 'Ambakaz',
                 'jenis_kelamin' => 'L',
+                'fakultas_id' => 1,
                 
             ],
             [
@@ -31,6 +32,7 @@ class DoswalSeeder extends Seeder
                 'nip' => '09876',
                 'nama_lengkap' => 'Prof. Muani',
                 'jenis_kelamin' => 'P',
+                'fakultas_id' => 1,
                 
             ],
         ];
@@ -70,7 +72,7 @@ class DoswalSeeder extends Seeder
             DosWal::create([
                 'dosen_id' => $dosen->id,
                 'nama_lengkap' => $data['nama_lengkap'],
-                
+                'fakultas_id' => $data['fakultas_id'],
             ]);
         }
     }

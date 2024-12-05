@@ -8,6 +8,7 @@ use App\Models\Dosen;
 use App\Models\DosWal;
 use App\Models\Kaprodi;
 use App\Models\UserRole;
+use App\Models\ProgramStudi;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -56,6 +57,11 @@ class DosWalKapSeeder extends Seeder
             $doswalRole = Role::where('nama_role', 'doswal')->first();
             $kaprodiRole = Role::where('nama_role', 'kaprodi')->first();
 
+    
+            // Mengambil Fakultas berdasarkan Program Studi
+            $programStudi = ProgramStudi::find($data['program_studi_id']); // Mendapatkan Program Studi berdasarkan ID
+            $fakultas = $programStudi->fakultas_id; // Mengambil Fakultas terkait dengan Program Studi
+
             // Membuat role untuk user
             UserRole::create([
                 'user_id' => $user->id,
@@ -78,6 +84,8 @@ class DosWalKapSeeder extends Seeder
             DosWal::create([
                 'dosen_id' => $dosen->id,
                 'nama_lengkap' => $data['nama_lengkap'],
+                'fakultas_id' => $fakultas, 
+
             ]);
 
             Kaprodi::create([

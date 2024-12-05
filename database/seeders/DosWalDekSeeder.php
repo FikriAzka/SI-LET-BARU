@@ -79,6 +79,7 @@ class DosWalDekSeeder extends Seeder
             DosWal::create([
                 'dosen_id' => $dosen->id,
                 'nama_lengkap' => $data['nama_lengkap'],
+                'fakultas_id' => $data['fakultas_id'],
             ]);
 
             Dekan::create([

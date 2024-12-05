@@ -15,7 +15,7 @@
                     {{ Auth::user()->dosen->nip }}
                 </p>
                 <p>
-                    {{ Auth::user()->dosen->dekan->fakultas->nama_fakultas }}
+                    {{ Auth::user()->dosen->doswal->first()->fakultas->nama_fakultas }}
                 </p>
                 <p>
                     {{ Auth::user()->email }}
