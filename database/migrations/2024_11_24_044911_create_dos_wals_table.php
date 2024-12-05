@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('dos_wals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('dosen_id')->constrained('dosens')->onDelete('cascade'); // Relasi ke tabel dosens
+            $table->foreignId('fakultas_id')->constrained('fakultas')->onDelete('cascade'); // Relasi ke tabel fakultas
             $table->string('nama_lengkap');
             $table->timestamps();
         });

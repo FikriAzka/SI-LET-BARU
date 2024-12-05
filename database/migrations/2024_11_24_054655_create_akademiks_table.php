@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('nama_lengkap');
             $table->string('nip')->unique();
             $table->enum('jenis_kelamin', ['L', 'P']); // Jenis kelamin
+            $table->foreignId('fakultas_id')->constrained('fakultas')->onDelete('cascade'); // Relasi ke tabel fakultas
+
             $table->timestamps();
         });
     }

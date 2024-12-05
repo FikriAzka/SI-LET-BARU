@@ -16,4 +16,9 @@ class DosWal extends Model
     {
         return $this->belongsTo(Dosen::class, 'dosen_id');
     }
+
+    public function fakultas()
+    {
+        return $this->belongsTo(Fakultas::class, 'fakultas_id');
+    }
 }
