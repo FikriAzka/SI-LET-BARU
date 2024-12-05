@@ -22,6 +22,7 @@ class AkademikSeeder extends Seeder
                 'nip' => '1234567890',
                 'nama_lengkap' => 'Budi Ganteng',
                 'jenis_kelamin' => 'L',
+                'fakultas_id' => 1,
             ],
         ];
 
@@ -30,7 +31,7 @@ class AkademikSeeder extends Seeder
             // Mengambil dua kata pertama dari nama lengkap
             $nameParts = explode(' ', $data['nama_lengkap']);
             $emailName = strtolower($nameParts[0] . (isset($nameParts[1]) ? $nameParts[1] : ''));
-            $email = $emailName . '@lecturer.com';
+            $email = $emailName . '@staff.com';
 
             $user = User::create([
                 'name' => $data['nama_lengkap'],
@@ -52,6 +53,7 @@ class AkademikSeeder extends Seeder
                 'nip' => $data['nip'],
                 'nama_lengkap' => $data['nama_lengkap'],
                 'jenis_kelamin' => $data['jenis_kelamin'],
+                'fakultas_id' => $data['fakultas_id'],
             ]);
         }
     }

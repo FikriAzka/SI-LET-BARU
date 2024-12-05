@@ -6,22 +6,23 @@
             Dashboard
         </h2>
         <div class="flex justify-center mb-8">
-            <div class="border rounded-lg p-6 w-96 text-center">
+            <div class="border rounded-lg p-6 w-80 text-center mb-7 shadow-lg">
                 <i class="fas fa-user-circle text-6xl mb-4">
                 </i>
                 <h3 class="font-bold text-xl">
-                    Bruce Wayne
+                    {{ Auth::user()->name }}
                 </h3>
                 <p>
-                    566646453345
+                    {{ Auth::user()->dosen->nip }}
                 </p>
                 <p>
-                    Fakultas Sains dan Matematika
+                    {{ Auth::user()->dosen->dekan->fakultas->nama_fakultas }}
                 </p>
                 <p>
-                    akubetmen@dekan.co.id
+                    {{ Auth::user()->email }}
                 </p>
             </div>
+            
         </div>
         <div class="flex justify-center space-x-8">
             <a href = "{{ route('dekan.penyetujuanjadwalkuliah') }}">

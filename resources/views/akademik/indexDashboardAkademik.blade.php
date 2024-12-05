@@ -6,18 +6,19 @@
     </h2>
     <div class="flex justify-center mt-8">
         <div class="border rounded-lg p-6 w-80 text-center mb-7 shadow-lg">
-            <i class="fas fa-user-circle text-6xl mb-4"></i>
-            <h3 class="text-xl font-bold">
-                Clark Kent
+            <i class="fas fa-user-circle text-6xl mb-4">
+            </i>
+            <h3 class="font-bold text-xl">
+                {{ Auth::user()->name }}
             </h3>
             <p>
-                5617212123
+                {{ Auth::user()->akademik->nip }}
             </p>
             <p>
-                Fakultas Sains dan Matematika
+                {{ Auth::user()->akademik->fakultas->nama_fakultas }} <!--Mau jurusan/fakultas-->
             </p>
             <p>
-                clarkasoy@akademik.com
+                {{ Auth::user()->email }}
             </p>
         </div>
     </div>
