@@ -14,7 +14,7 @@ class Kaprodi extends Model
     }
 
     // Relasi ke Prodi
-    public function prodi()
+    public function program_studi()
     {
         return $this->belongsTo(ProgramStudi::class, 'program_studi_id');
     }

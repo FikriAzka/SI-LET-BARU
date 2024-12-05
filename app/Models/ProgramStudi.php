@@ -17,4 +17,10 @@ class ProgramStudi extends Model
         return $this->hasMany(Ruang::class);
     }
 
+    public function kaprodi()
+    {
+        return $this->hasMany(Kaprodi::class, 'program_studi_id');
+    }
+
+
 }
