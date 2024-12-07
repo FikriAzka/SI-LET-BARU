@@ -31,6 +31,7 @@ class RuangSeeder extends Seeder
                 'kapasitas' => '25',
                 'program_studi_id' => 2 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
             ],
+            
         ]);
     }
 }

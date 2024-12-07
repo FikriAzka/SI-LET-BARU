@@ -9,13 +9,14 @@
    }
 
    .selected {
-       background-color: #34D399;
-       color: white;
-   }
+    background-color: #34D399;
+    color: white;
+    }
 
-   .selected p {
-       color: white;
-   }
+    .selected .status {
+    color: white;
+    }
+
 
    .matakuliah {
        transition: background-color 0.3s ease;
@@ -133,15 +134,13 @@
                                             <!-- Tombol Edit dan Hapus -->
                                             <div class="flex gap-2">
                             
-                                                    <button type="submit"
-                                                        class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-                                                        Tambah
-                                                    </button>
-                                        
-                                                
+                                                <button type="button" 
+                                                    class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 tambah-btn" 
+                                                    data-sks="{{ $jadwal->mataKuliah->sks }}" 
+                                                    data-mk-id="{{ $jadwal->mataKuliah->id }}">
+                                                    Tambah
+                                                </button>
                                             </div>
-
-
                                         </div>
                                     </div>
                                 @endif
@@ -207,5 +206,34 @@ function updateScheduleDisplay() {
        }
    });
 }
+
+document.querySelectorAll('.tambah-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        const sks = parseInt(this.dataset.sks);
+        const mkId = this.dataset.mkId;
+
+        if (totalSKS + sks > maxSKS) {
+            alert(`Total SKS tidak boleh melebihi ${maxSKS}`);
+            return;
+        }
+
+        totalSKS += sks;
+        document.getElementById('totalSKS').textContent = totalSKS;
+
+        // Temukan kolom "Pilih Mata Kuliah" terkait
+        const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
+        if (selectedMatakuliah) {
+            selectedMatakuliah.classList.add('selected');
+            const statusElement = selectedMatakuliah.querySelector('.status');
+            statusElement.textContent = 'Terpilih';
+            statusElement.classList.remove('text-red-600');
+            statusElement.classList.add('text-green-600');
+        }
+
+        alert(`Mata kuliah berhasil ditambahkan! Total SKS: ${totalSKS}`);
+    });
+});
+
+
 </script>
 @endsection
