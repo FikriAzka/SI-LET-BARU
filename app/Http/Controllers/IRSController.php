@@ -6,6 +6,7 @@ use App\Models\Irs;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class IRSController extends Controller
 {
@@ -49,4 +50,22 @@ class IRSController extends Controller
 
         return redirect()->route('irs.create')->with('success', 'IRS berhasil diajukan');
     }
+    public function simpanIrs(Request $request)
+{
+    $validatedData = $request->validate([
+        'mata_kuliah_id' => 'required|exists:mata_kuliahs,id',
+        'mahasiswa_id' => 'required|exists:mahasiswas,id',
+    ]);
+
+    // Simpan data ke tabel IRS
+    DB::table('irs')->insert([
+        'mahasiswa_id' => $validatedData['mahasiswa_id'],
+        'mata_kuliah_id' => $validatedData['mata_kuliah_id'],
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    return response()->json(['message' => 'IRS berhasil disimpan']);
+}
+
 }
