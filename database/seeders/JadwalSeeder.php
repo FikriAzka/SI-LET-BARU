@@ -59,6 +59,21 @@ class JadwalSeeder extends Seeder
                 'pengampu_2'=> null,
                 'pengampu_3'=> null, 
             ],
+            [
+                'mata_kuliah_id' => '25',
+                'dosen_id'=> '3',
+                'hari'=> 'Selasa',
+                'ruangan'=> 'R002',
+                'kuota_kelas'=> '50',
+                'sks'=> '3',
+                'sifat'=> 'Wajib',
+                'kelas'=> 'C',
+                'semester'=>  '3',
+                'jam_mulai'=> '09.40',
+                'jam_selesai'=> '12.10',
+                'pengampu_2'=> null,
+                'pengampu_3'=> null, 
+            ],
         ]);
     }
 }
