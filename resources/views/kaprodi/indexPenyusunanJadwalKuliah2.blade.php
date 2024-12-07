@@ -145,7 +145,7 @@
                                                     <button
                                                         class="rounded p-1.5 border-l-2 {{ $colorClass }} w-full text-left">
                                                         <p class="text-xs font-normal mb-px">
-                                                            {{ $jadwal->mataKuliah->nama_mk }}</p>
+                                                            {{ $jadwal->mataKuliah->nama_mk . ' ' . $jadwal->kelas }}</p>
                                                         <p class="text-xs font-semibold">{{ $jadwal->jam_mulai }} -
                                                             {{ $jadwal->jam_selesai }}</p>
                                                     </button>
@@ -185,8 +185,6 @@
                                                                 </button>
                                                             </form>
                                                         </div>
-
-
                                                     </div>
                                                 </div>
                                             @endif

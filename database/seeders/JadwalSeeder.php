@@ -24,10 +24,11 @@ class JadwalSeeder extends Seeder
                 'sifat'=> 'Wajib',
                 'kelas'=> 'A',
                 'semester'=>  '3',
-                'jam_mulai'=> '07.00',
-                'jam_selesai'=> '10.20',
+                'jam_mulai' => '07:00:00',
+                'jam_selesai' => '10:20:00',
                 'pengampu_2'=> null,
                 'pengampu_3'=> null,
+                'status' => 'Disetujui'
             ],
             [
                 'mata_kuliah_id' => '24',
@@ -39,10 +40,11 @@ class JadwalSeeder extends Seeder
                 'sifat'=> 'Wajib',
                 'kelas'=> 'A',
                 'semester'=>  '3',
-                'jam_mulai'=> '07.00',
-                'jam_selesai'=> '10.20',
+                'jam_mulai' => '07:00:00',
+                'jam_selesai' => '10:20:00',
                 'pengampu_2'=> null,
                 'pengampu_3'=> null, 
+                'status' => 'Disetujui'
             ],
             [
                 'mata_kuliah_id' => '23',
@@ -54,10 +56,11 @@ class JadwalSeeder extends Seeder
                 'sifat'=> 'Wajib',
                 'kelas'=> 'B',
                 'semester'=>  '3',
-                'jam_mulai'=> '07.00',
-                'jam_selesai'=> '10.20',
+                'jam_mulai' => '07:00:00',
+                'jam_selesai' => '10:20:00',
                 'pengampu_2'=> null,
                 'pengampu_3'=> null, 
+                'status' => 'Disetujui'
             ],
         ]);
     }
