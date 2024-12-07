@@ -132,23 +132,13 @@
 
                                             <!-- Tombol Edit dan Hapus -->
                                             <div class="flex gap-2">
-                                                <form action="{{ route('jadwal.edit', $jadwal->id) }}"
-                                                    method="GET">
+                            
                                                     <button type="submit"
                                                         class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-                                                        Edit
+                                                        Tambah
                                                     </button>
-                                                </form>
-                                                <form action="{{ route('jadwal.destroy', $jadwal->id) }}"
-                                                    method="POST"
-                                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit"
-                                                        class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-                                                        Hapus
-                                                    </button>
-                                                </form>
+                                        
+                                                
                                             </div>
 
 
