@@ -23,6 +23,6 @@ class MataKuliah extends Model
 
     public function jadwals()
     {
-        return $this->hasMany(Jadwal::class);
+        return $this->hasMany(Jadwal::class, 'mata_kuliah_id');
     }
 }
