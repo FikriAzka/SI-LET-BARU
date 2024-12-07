@@ -42,6 +42,6 @@ class Dosen extends Model
 
     public function jadwals()
     {
-        return $this->hasMany(Jadwal::class);
+        return $this->hasMany(Jadwal::class, 'dosen_id');
     }
 }

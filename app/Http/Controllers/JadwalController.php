@@ -31,6 +31,7 @@ class JadwalController extends Controller
     public function index()
     {
         $jadwals = Jadwal::with(['mataKuliah', 'dosen'])->get();
+        // dd($jadwals);
 
         return view('kaprodi.IndexPenyusunanJadwalKuliah2', compact('jadwals'));
     }
