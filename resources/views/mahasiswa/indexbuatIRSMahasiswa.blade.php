@@ -50,15 +50,30 @@
 
         <div class="border-2 p-4 rounded-md shadow-sm mt-4">
             <h3 class="text-xl font-bold">Rancanglah Isian Rencana Studi (IRS)</h3>
-            <p class="text-sm text-gray-600">Ajukan IRS ke Masing - masing Dosen Pembimbing untuk persetujuan</p>
+            <p class="text-sm text-gray-600">
+                Ajukan IRS ke masing-masing Dosen Pembimbing untuk persetujuan.
+            </p>
 
             <div class="mt-4 p-4 bg-blue-50 rounded-md">
                 <p class="font-semibold">Info Mahasiswa:</p>
                 <p>Semester: {{ $mahasiswa->semester }}</p>
+                <p>IPS: <span id="ipsValue" class="font-bold">{{ $mahasiswa->ips }}</span></p>
                 <p>Total SKS yang diambil: <span id="totalSKS" class="font-bold">0</span></p>
-                <p class="text-sm text-gray-600">Maksimal SKS yang dapat diambil: 24</p>
+                <p class="text-sm text-gray-600">
+                    Maksimal SKS yang dapat diambil berdasarkan IPS:
+                    <span id="maxSKS" class="font-bold"></span>
+                </p>
             </div>
+            <form id="irsForm" action="{{ route('irs.submit') }}" method="POST">
+                @csrf
+                <button id="submitButton"
+                    class="mt-4 bg-green-500 text-white px-4 py-2 rounded-md shadow hover:bg-green-600">
+                    Kirim Rencana Studi
+                </button>
+            </form>
+
         </div>
+
 
         <div class="flex mt-4">
             <div class="w-1/4 bg-white p-4 border rounded-lg">
@@ -178,7 +193,10 @@
                                                         <button type="button"
                                                             class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 tambah-btn"
                                                             data-sks="{{ $jadwal->mataKuliah->sks }}"
-                                                            data-mk-id="{{ $jadwal->mataKuliah->id }}">
+                                                            data-mk-id="{{ $jadwal->mataKuliah->id }}"
+                                                            data-jadwal-id="{{ $jadwal->id }}"> <!-- Tambahkan ini -->
+                                                            >
+
                                                             Tambah
                                                         </button>
 
@@ -204,9 +222,42 @@
 
     <script>
         let totalSKS = 0;
-        const maxSKS = 24;
+        let maxSKS = 0;
         let selectedCourses = new Set(); // Untuk melacak mata kuliah yang dipilih
         let scheduleMap = {}; // Untuk melacak jadwal yang dipilih (key: "day-time")
+
+        // Sembunyikan semua jadwal di kalender saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.calendar-cell .relative.group').forEach(item => {
+                item.classList.add('hidden');
+            });
+
+            // Pastikan mata kuliah di daftar juga disembunyikan
+            document.querySelectorAll('.matakuliah').forEach(item => {
+                item.classList.add('hidden');
+            });
+
+            console.log('Semua jadwal dan mata kuliah disembunyikan pada awal halaman.');
+
+            // Ambil nilai IPS dari elemen di halaman
+            const ipsValue = parseFloat(document.getElementById('ipsValue').textContent);
+            const maxSKSDisplay = document.getElementById('maxSKS');
+
+            // Hitung maksimal SKS berdasarkan IPS
+            // Default
+            if (ipsValue >= 3.00) {
+                maxSKS = 24;
+            } else if (ipsValue >= 2.50 && ipsValue < 3.00) {
+                maxSKS = 22;
+            } else if (ipsValue >= 2.00 && ipsValue < 2.50) {
+                maxSKS = 20;
+            } else if (ipsValue < 2.00) {
+                maxSKS = 18;
+            }
+
+            // Tampilkan hasil ke elemen halaman
+            maxSKSDisplay.textContent = maxSKS;
+        });
 
         document.querySelectorAll('.tambah-btn').forEach(button => {
             button.addEventListener('click', function() {
@@ -216,6 +267,12 @@
                 const day = this.closest('.calendar-cell').dataset.day;
                 const time = this.closest('.calendar-cell').dataset.time;
                 const scheduleKey = `${day}-${time}`; // Identifikasi jadwal dengan "day-time"
+
+                // Tambahkan class .selected ke elemen kalender
+                const calendarElement = this.closest('.relative.group');
+                if (calendarElement) {
+                    calendarElement.classList.add('selected');
+                }
 
                 // Cek apakah jadwal sudah ada di waktu yang sama
                 if (scheduleMap[scheduleKey]) {
@@ -228,12 +285,10 @@
                     alert('Anda sudah memilih jadwal untuk mata kuliah ini. Pilih mata kuliah yang lain.');
                     return;
                 }
-
                 if (totalSKS + sks > maxSKS) {
-                    alert(`Total SKS tidak boleh melebihi ${maxSKS}`);
+                    alert(`Total SKS tidak boleh melebihi ${maxSKS} berdasarkan IPS Anda.`);
                     return;
                 }
-
                 // Gray out other unselected schedule buttons for the same course
                 document.querySelectorAll(`.tambah-btn[data-mk-id="${mkId}"]`).forEach(btn => {
                     if (btn !== this) { // Exclude the currently clicked button
@@ -260,13 +315,12 @@
                     statusElement.classList.add('text-green-600');
                 }
 
-
-
+                // Tampilkan alert jika mata kuliah berhasil ditambahkan
                 alert(`Mata kuliah berhasil ditambahkan! Total SKS: ${totalSKS}`);
-
-                //
             });
         });
+
+
 
         document.querySelectorAll('.hapus-btn').forEach(button => {
             button.addEventListener('click', function() {
@@ -307,37 +361,6 @@
                 }
 
                 alert(`Mata kuliah berhasil dihapus! Total SKS: ${totalSKS}`);
-            });
-
-            let selectedMkIds = new Set(); // Gunakan Set untuk menyimpan ID matakuliah yang dipilih
-
-            // Dropdown untuk memilih matakuliah
-            document.getElementById('mk-filter').addEventListener('change', function() {
-                const selectedMkId = this.value;
-
-                if (selectedMkId) {
-                    selectedMkIds.add(selectedMkId); // Tambahkan ke daftar pilihan
-                }
-
-                // Tampilkan matakuliah yang dipilih
-                document.querySelectorAll('.matakuliah').forEach(item => {
-                    const mkId = item.dataset.mkId;
-                    if (selectedMkIds.has(mkId)) {
-                        item.classList.remove('hidden');
-                    } else {
-                        item.classList.add('hidden');
-                    }
-                });
-
-                // Tampilkan jadwal di kalender
-                document.querySelectorAll('.calendar-cell .relative.group').forEach(item => {
-                    const mkId = item.querySelector('.tambah-btn')?.dataset.mkId;
-                    if (selectedMkIds.has(mkId)) {
-                        item.classList.remove('hidden');
-                    } else {
-                        item.classList.add('hidden');
-                    }
-                });
             });
         });
         let selectedMkIds = new Set(); // Gunakan Set untuk menyimpan ID matakuliah yang dipilih
@@ -400,6 +423,102 @@
 
                 console.log(`Mata kuliah dengan ID ${mkId} dibatalkan.`);
             }
+        });
+        document.getElementById('submitButton').addEventListener('click', function() {
+            // Collect selected schedules
+            const selectedSchedules = [];
+
+            // Find all selected schedule elements
+            document.querySelectorAll('.calendar-cell .relative.group.selected').forEach(item => {
+                const tambahBtn = item.querySelector('.tambah-btn');
+                if (tambahBtn) {
+                    const mkId = tambahBtn.dataset.mkId;
+                    const jadwalId = tambahBtn.dataset.jadwalId;
+
+                    // Ensure we have both course and schedule IDs
+                    if (mkId && jadwalId) {
+                        selectedSchedules.push({
+                            mata_kuliah_id: mkId,
+                            jadwal_id: jadwalId
+                        });
+                    }
+                }
+            });
+
+            // Debug: Log selected schedules
+            console.log('Selected Schedules:', selectedSchedules);
+
+            // Validate selections
+            if (selectedSchedules.length === 0) {
+                alert('Pilih setidaknya satu jadwal sebelum mengirim Rencana Studi.');
+                return;
+            }
+
+            // Confirm submission
+            const confirmed = confirm(`Anda akan mengirim ${selectedSchedules.length} mata kuliah. Lanjutkan?`);
+            if (!confirmed) {
+                return;
+            }
+
+            // Debug: Log totalSKS
+            console.log('Total SKS:', totalSKS);
+
+            // Prepare data for submission
+            const submissionData = {
+                total_sks: totalSKS,
+                semester: document.getElementById('semester').textContent.trim(),
+                schedules: selectedSchedules
+            };
+
+            // Debug: Log submission data
+            console.log('Submission Data:', submissionData);
+
+            // Send data to server
+            fetch('/irs/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    },
+                    body: JSON.stringify(submissionData)
+                })
+                .then(response => {
+                    // Debug: Log full response
+                    console.log('Response status:', response.status);
+                    console.log('Response headers:', response.headers);
+
+                    // More detailed error handling
+                    if (response.status === 422) {
+                        return response.json().then(errorData => {
+                            console.error('Validation Errors:', errorData);
+                            alert('Validasi gagal: ' + JSON.stringify(errorData.message));
+                            throw new Error('Validation Failed');
+                        });
+                    }
+
+                    if (!response.ok) {
+                        throw new Error('Server responded with status: ' + response.status);
+                    }
+
+                    return response.json();
+                })
+                .then(data => {
+                    // Debug: Log success response
+                    console.log('Success data:', data);
+
+                    if (data.success) {
+                        alert('Rencana Studi berhasil disimpan!');
+                        window.location.href = '/buatIRS-mahasiswa';
+                    } else {
+                        alert(data.message || 'Gagal menyimpan Rencana Studi');
+                    }
+                })
+                .catch(error => {
+                    // Debug: Log detailed error
+                    console.error('Detailed Error:', error);
+                    alert('Terjadi kesalahan: ' + error.message);
+                });
         });
     </script>
 @endsection

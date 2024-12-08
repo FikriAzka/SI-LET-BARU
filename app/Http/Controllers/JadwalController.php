@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dosen;
 use App\Models\Ruang;
 use App\Models\Jadwal;
+use App\Models\Mahasiswa;
 use App\Models\MataKuliah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,17 +16,30 @@ class JadwalController extends Controller
     public function buatIRS_mahasiswa()
     {
         $mahasiswa = Auth::user()->mahasiswa;
+        
         $semester = $mahasiswa->semester;
+        // Ambil data mahasiswa berdasarkan ID
+        // Pastikan data mahasiswa valid
+        if (!$mahasiswa) {
+            return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
+        }
 
+        // Pastikan data IPS tersedia
+        if (is_null($mahasiswa->ips)) {
+            return redirect()->back()->with('error', 'Data IPS mahasiswa tidak tersedia.');
+        }
+        
         $jadwals = Jadwal::where('semester', $semester)->where('status', 'Disetujui')->get();
+        // $jadwals = Jadwal::all();
         $mataKuliahs = MataKuliah::where('semester', $semester)->get();
+        $matkulAll = MataKuliah::all();
         $ruangs = Ruang::where('status', 'Disetujui')
             ->where('keterangan', 'tersedia')
             ->get();
 
         // dd($mataKuliahs);
 
-        return view('mahasiswa.indexbuatIRSMahasiswa', compact('jadwals', 'mataKuliahs', 'mahasiswa', 'ruangs'));
+        return view('mahasiswa.indexbuatIRSMahasiswa', compact('jadwals', 'mataKuliahs', 'mahasiswa', 'ruangs', 'matkulAll'));
     }
 
     public function index()
