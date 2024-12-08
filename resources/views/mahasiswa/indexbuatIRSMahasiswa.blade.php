@@ -21,6 +21,13 @@
    .matakuliah {
        transition: background-color 0.3s ease;
    }
+
+    .hapus-btn:hover {
+        background-color: #F87171;
+    }
+</style>
+
+   
 </style>
 
 <div class="p-4">
@@ -133,14 +140,21 @@
 
                                             <!-- Tombol Edit dan Hapus -->
                                             <div class="flex gap-2">
-                            
                                                 <button type="button" 
                                                     class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 tambah-btn" 
                                                     data-sks="{{ $jadwal->mataKuliah->sks }}" 
                                                     data-mk-id="{{ $jadwal->mataKuliah->id }}">
                                                     Tambah
                                                 </button>
+                                            
+                                                <button type="button" 
+                                                    class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 hapus-btn" 
+                                                    data-sks="{{ $jadwal->mataKuliah->sks }}" 
+                                                    data-mk-id="{{ $jadwal->mataKuliah->id }}">
+                                                    Hapus
+                                                </button>
                                             </div>
+                                            
                                         </div>
                                     </div>
                                 @endif
@@ -159,42 +173,42 @@ let totalSKS = 0;
 const maxSKS = 24;
 let selectedCourses = new Set();
 
-document.querySelectorAll('.matakuliah').forEach(item => {
-   item.addEventListener('click', function() {
-       const sks = parseInt(this.dataset.sks);
-       const mkName = this.dataset.mkName;
-       const statusElement = this.querySelector('.status');
+// document.querySelectorAll('.matakuliah').forEach(item => {
+//    item.addEventListener('click', function() {
+//        const sks = parseInt(this.dataset.sks);
+//        const mkName = this.dataset.mkName;
+//        const statusElement = this.querySelector('.status');
        
-       if(!this.classList.contains('selected')) {
-           if(totalSKS + sks > maxSKS) {
-               alert(`Total SKS tidak boleh melebihi ${maxSKS}`);
-               return;
-           }
+//        if(!this.classList.contains('selected')) {
+//            if(totalSKS + sks > maxSKS) {
+//                alert(`Total SKS tidak boleh melebihi ${maxSKS}`);
+//                return;
+//            }
            
-           // Tambahkan ke jadwal
-           selectedCourses.add(mkName);
-           updateScheduleDisplay();
+//            // Tambahkan ke jadwal
+//            selectedCourses.add(mkName);
+//            updateScheduleDisplay();
            
-           this.classList.add('selected');
-           statusElement.textContent = 'Terpilih';
-           statusElement.classList.remove('text-red-600');
-           statusElement.classList.add('text-green-600');
-           totalSKS += sks;
-       } else {
-           // Hapus dari jadwal
-           selectedCourses.delete(mkName);
-           updateScheduleDisplay();
+//            this.classList.add('selected');
+//            statusElement.textContent = 'Terpilih';
+//            statusElement.classList.remove('text-red-600');
+//            statusElement.classList.add('text-green-600');
+//            totalSKS += sks;
+//        } else {
+//            // Hapus dari jadwal
+//            selectedCourses.delete(mkName);
+//            updateScheduleDisplay();
            
-           this.classList.remove('selected');
-           statusElement.textContent = 'Belum Terpilih';
-           statusElement.classList.remove('text-green-600');
-           statusElement.classList.add('text-red-600');
-           totalSKS -= sks;
-       }
+//            this.classList.remove('selected');
+//            statusElement.textContent = 'Belum Terpilih';
+//            statusElement.classList.remove('text-green-600');
+//            statusElement.classList.add('text-red-600');
+//            totalSKS -= sks;
+//        }
        
-       document.getElementById('totalSKS').textContent = totalSKS;
-   });
-});
+//        document.getElementById('totalSKS').textContent = totalSKS;
+//    });
+// });
 
 function updateScheduleDisplay() {
    document.querySelectorAll('.jadwal-item').forEach(item => {
@@ -233,6 +247,40 @@ document.querySelectorAll('.tambah-btn').forEach(button => {
         alert(`Mata kuliah berhasil ditambahkan! Total SKS: ${totalSKS}`);
     });
 });
+
+document.querySelectorAll('.hapus-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        const sks = parseInt(this.dataset.sks);
+        const mkId = this.dataset.mkId;
+
+        if (totalSKS - sks < 0) {
+            alert('Tidak ada mata kuliah yang bisa dihapus.');
+            return;
+        }
+
+        totalSKS -= sks;
+        document.getElementById('totalSKS').textContent = totalSKS;
+
+        // Temukan kolom "Pilih Mata Kuliah" terkait
+        const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
+        if (selectedMatakuliah) {
+            selectedMatakuliah.classList.remove('selected');
+            const statusElement = selectedMatakuliah.querySelector('.status');
+            statusElement.textContent = 'Belum Terpilih';
+            statusElement.classList.remove('text-green-600');
+            statusElement.classList.add('text-red-600');
+        }
+
+        // Hapus highlight jadwal di kalender
+        document.querySelectorAll(`.calendar-cell[data-mk-id="${mkId}"]`).forEach(cell => {
+            cell.classList.remove('jadwal-highlight');
+        });
+
+        alert(`Mata kuliah berhasil dihapus! Total SKS: ${totalSKS}`);
+    });
+});
+
+
 
 
 </script>
