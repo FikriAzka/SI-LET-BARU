@@ -64,7 +64,7 @@
                     <span id="maxSKS" class="font-bold"></span>
                 </p>
             </div>
-            
+
 
 
         </div>
@@ -81,11 +81,23 @@
                         class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                         <option value="" disabled selected class="text-gray-500">--Mata Kuliah--</option>
 
-                        @foreach ($mataKuliahs as $mk)
+                        @foreach ($matkulAll as $mk)
                             <option value="{{ $mk->id }}">{{ $mk->nama_mk }}</option>
                         @endforeach
                     </select>
                 </div>
+
+                {{-- <div class="mb-4">
+                    <label for="mk-filter" class="block text-sm font-medium text-gray-700">Filter Mata Kuliah</label>
+                    <select id="mk-filter"
+                        class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="" disabled selected class="text-gray-500">--Mata Kuliah--</option>
+
+                        @foreach ($matkulAll as $mk)
+                            <option value="{{ $mk->id }}">{{ $mk->nama_mk }}</option>
+                        @endforeach
+                    </select>
+                </div> --}}
 
 
                 <div class="mb-4" id="matakuliahList">
@@ -350,10 +362,6 @@
                     },
 
                 });
-
-
-                // Update UI
-
             });
         });
 

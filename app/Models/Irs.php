@@ -14,7 +14,9 @@ class Irs extends Model
         'jadwal_id',
         'semester',
         'prioritas',
+        'nilai',
         'status',
+        'status_lulus',
     ];
 
     public function mahasiswa()

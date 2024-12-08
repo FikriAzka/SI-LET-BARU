@@ -15,9 +15,14 @@ return new class extends Migration
             $table->id(); // Primary Key (id)
             $table->unsignedBigInteger('nim'); // Foreign Key ke tabel mahasiswa (id)
             $table->unsignedBigInteger('jadwal_id'); // Foreign Key ke tabel jadwal
-            $table->string('semester');
+            $table->integer('semester');
+
             $table->integer('prioritas')->default(0); // Default prioritas
+            $table->integer('nilai'); // Default prioritas
+
             $table->string('status')->default('pending'); // Status default
+            $table->string('status_lulus'); // Status default
+
             $table->timestamps();
 
             // Foreign Key Constraints
