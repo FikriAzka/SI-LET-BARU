@@ -90,15 +90,15 @@ class JadwalController extends Controller
         $validated = $request->validate([
             'mata_kuliah_id' => 'required',
             'dosen_id' => 'required',
-            'ruangan' => 'required',
             'hari' => 'required',
-            'jam_mulai' => 'required',
-            'jam_selesai' => 'required',
-            'kelas' => 'required',
+            'ruangan' => 'required',
             'kuota_kelas' => 'required|integer',
             'sks' => 'required|integer',
             'sifat' => 'required',
+            'kelas' => 'required',
             'semester' => 'required|integer',
+            'jam_mulai' => 'required',
+            'jam_selesai' => 'required',
         ]);
 
         $jadwal = Jadwal::findOrFail($id);
