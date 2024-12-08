@@ -14,16 +14,17 @@
                 </div>
                 <div class="ml-10">
                     <h3 class="text-xl font-bold">
-                        Wally West
+                        {{ Auth::user()->mahasiswa->nama_lengkap }}
                     </h3>
                     <p>
-                        2406021442432
+                        {{ Auth::user()->mahasiswa->nim }}
                     </p>
                     <p>
-                        S1 Sastra Inggris
+                        {{ Auth::user()->mahasiswa && Auth::user()->mahasiswa->programStudi ? Auth::user()->mahasiswa->programStudi->nama_program_studi : 'Program Studi not available' }}
+
                     </p>
                     <p>
-                        kachaawww@gmail.com
+                        {{ Auth::user()->email }}
                     </p>
                 </div>
             </div>

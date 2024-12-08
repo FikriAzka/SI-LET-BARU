@@ -21,7 +21,8 @@
                     <div class="flex justify-between items-center">
                         <h1 class="text-black font-bold">Penyusunan Jadwal Kuliah</h1>
                         <!-- Tombol Tambah Mata Kuliah -->
-                        <button onclick="openCreateModal()" class="bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-800 transition duration-300">
+                        <button onclick="openCreateModal()"
+                            class="bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-800 transition duration-300">
                             + Tambah Mata Kuliah
                         </button>
                         <!-- Tombol Tambah Jadwal -->
@@ -29,10 +30,11 @@
                             class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
                             + Tambah Jadwal
                         </button>
-                        
+
                     </div>
                 </div>
-                <div id="createModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 items-center justify-center z-50">
+                <div id="createModal"
+                    class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 items-center justify-center z-50">
                     <div class="bg-white p-6 rounded-lg w-full max-w-md">
                         <div class="flex justify-between items-center">
                             <h2 class="text-xl font-bold">Tambah Mata Kuliah</h2>
@@ -49,19 +51,22 @@
                                     </ul>
                                 </div>
                             @endif
-                
+
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-bold">Kode Mata Kuliah:</label>
-                                    <input type="text" name="kode_mk" maxlength="10" class="w-full border rounded p-2 text-sm" required>
+                                    <input type="text" name="kode_mk" maxlength="10"
+                                        class="w-full border rounded p-2 text-sm" required>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-bold">Nama Mata Kuliah:</label>
-                                    <input type="text" name="nama_mk" maxlength="50" class="w-full border rounded p-2 text-sm">
+                                    <input type="text" name="nama_mk" maxlength="50"
+                                        class="w-full border rounded p-2 text-sm">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-bold">Semester:</label>
-                                    <input type="number" name="semester" min="1" class="w-full border rounded p-2 text-sm">
+                                    <input type="number" name="semester" min="1"
+                                        class="w-full border rounded p-2 text-sm">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-bold">Sifat:</label>
@@ -72,11 +77,12 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-bold">SKS:</label>
-                                    <input type="number" name="sks" min="1" max="10" class="w-full border rounded p-2 text-sm">
+                                    <input type="number" name="sks" min="1" max="10"
+                                        class="w-full border rounded p-2 text-sm">
                                 </div>
                             </div>
-                            
-                
+
+
                             <div class="flex justify-end space-x-4 mt-4">
                                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                                     Simpan
@@ -87,8 +93,8 @@
                         </form>
                     </div>
                 </div>
-                
-                
+
+
 
                 <section
                     class="relative
@@ -156,11 +162,13 @@
                                                         <p class="text-sm font-semibold mb-2">Detail Jadwal</p>
                                                         <ul class="text-sm text-gray-700 mb-3">
                                                             <li><strong>Mata Kuliah:</strong>
-                                                                {{ $jadwal->mataKuliah->nama_mk . ' ' . $jadwal->kelas }}</li>
+                                                                {{ $jadwal->mataKuliah->nama_mk . ' ' . $jadwal->kelas }}
+                                                            </li>
                                                             <li><strong>Ruang:</strong> {{ $jadwal->ruangan }}</li>
                                                             <li><strong>Hari:</strong> {{ $jadwal->hari }}</li>
                                                             <li><strong>Kelas:</strong> {{ $jadwal->kelas }}</li>
-                                                            <li><strong>Kuota kelas:</strong> {{ $jadwal->kuota_kelas }}</li>
+                                                            <li><strong>Kuota kelas:</strong> {{ $jadwal->kuota_kelas }}
+                                                            </li>
                                                             <li><strong>Jam:</strong> {{ $jadwal->jam_mulai }} -
                                                                 {{ $jadwal->jam_selesai }}</li>
                                                         </ul>
@@ -204,12 +212,16 @@
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
         <script>
             function openCreateModal() {
-                document.getElementById('createModal').classList.remove('hidden');
+                const modal = document.getElementById('createModal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
             }
-        
+
             function closeCreateModal() {
-                document.getElementById('createModal').classList.add('hidden');
+                const modal = document.getElementById('createModal');
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
             }
         </script>
-        
+
     @endsection
