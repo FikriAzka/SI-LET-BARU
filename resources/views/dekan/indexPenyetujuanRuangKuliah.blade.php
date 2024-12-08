@@ -38,38 +38,41 @@
             @endif
 
             {{-- Menampilkan daftar ruangan --}}
-            <div class="space-y-4">
-                @forelse($ruangans as $ruangan)
-                    <div class="bg-gray-200 p-4 rounded-lg flex justify-between items-center">
-                        <div>
-                            <p class="font-semibold">
-                                {{ $ruangan->noruang }} |
-                                {{ $ruangan->fungsi }}
-                            </p>
-                            <p class="text-sm">
-                                {{ $ruangan->kapasitas }} Kapasitas |
-                                {{ $ruangan->programStudi->nama_program_studi }}
-                            </p>
+            <form action="{{ route('ruangan.approveAll') }}" method="POST" id="approveAllForm">
+                @csrf
+                <div class="space-y-4">
+                    @forelse($ruangans as $ruangan)
+                        <div class="bg-gray-200 p-4 rounded-lg flex justify-between items-center">
+                            <div>
+                                <p class="font-semibold">
+                                    {{ $ruangan->noruang }} |
+                                    {{ $ruangan->fungsi }}
+                                </p>
+                                <p class="text-sm">
+                                    {{ $ruangan->kapasitas }} Kapasitas |
+                                    {{ $ruangan->programStudi->nama_program_studi }}
+                                </p>
+                                {{-- Tambahkan input hidden untuk mengirim ID ruangan --}}
+                                <input type="hidden" name="ruangans[]" value="{{ $ruangan->id }}">
+                            </div>
                         </div>
-                        <div class="flex items-center space-x-4">
-                            <form action="{{ route('ruangan.approve', $ruangan->id) }}" method="POST" >
-                                @csrf
-                                <button type="submit" class="fas fa-check text-3xl text-gray-600 hover:text-green-500 transition-colors">
-                                </button>
-                            </form>
-                            <form action="{{ route('ruangan.reject', $ruangan->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="fas fa-times text-3xl text-gray-600 hover:text-red-500 transition-colors">
-                                </button>
-                            </form>
+                    @empty
+                        <div class="text-center text-white">
+                            Tidak ada ruangan untuk disetujui.
                         </div>
+                    @endforelse
+                </div>
+
+                {{-- Tombol Setujui Semua --}}
+                @if (!$ruangans->isEmpty())
+                    <div class="mt-4 flex justify-center">
+                        <button type="submit"
+                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            Setujui Semua
+                        </button>
                     </div>
-                @empty
-                    <div class="text-center text-white">
-                        Tidak ada ruangan untuk disetujui.
-                    </div>
-                @endforelse
-            </div>
+                @endif
+            </form>
 
             {{-- Pagination --}}
             <div class="mt-4 flex justify-center">
