@@ -1,71 +1,88 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 use App\Models\Irs;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class IRSController extends Controller
 {
-    // Menampilkan form untuk membuat IRS
-    public function create()
-    {
-        return view('irs.create');
-    }
+public function submitIRS(Request $request)
+{
+    $mhs = Mahasiswa::where('user_id',  Auth::user()->id)->first();
+    // return response()->json($mhs);
+    // Add detailed logging
+    Log::info('IRS Submission Request:', $request->all());
 
-    // Menyimpan IRS yang telah dibuat
-    public function store(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'nim' => 'required|exists:mahasiswas,nim',
-            'semester' => 'required|integer',
-            'kode_mk' => 'required|string',
-            'nama_mk' => 'required|string',
-            'kelas' => 'required|string',
-            'sks' => 'required|integer',
-            'tanggal_pengajuan' => 'required|date',
+    try {
+        $check = Irs::where('nim', $mhs->nim)
+        ->where('jadwal_id', $request->jadwal_id)
+        ->where('semester', $mhs->semester)
+        ->first();
+
+        // return response()->json($check);
+
+        // Start a database transaction
+        // return response()->json($request->jadwal_id);
+        // Create a new IRS record
+        if(is_null($check)){
+            $irs = Irs::create([
+                'nim' => $mhs->nim, // Adjust based on your user model
+                'jadwal_id' => intval($request->jadwal_id),
+                'semester' => $mhs->semester,
+                'prioritas' => 1,
+                'status' => 'pending'
+            ]);
+            // return response()->json($irs);
+            // Log successful submission
+            Log::info('IRS Submission Successful', ['irs_id' => $irs->id]);
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Rencana Studi berhasil disimpan',
+                'irs_id' => $irs->id
+            ]);
+        } else{
+            return response()->json([
+                'success' => true,
+                'message' => 'Rencana Studi berhasil disimpan',
+                'irs_id' => $check->id
+            ]);
+        }
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Handle validation errors
+        DB::rollBack();
+        
+        // Log validation errors
+        Log::error('IRS Submission Validation Error', [
+            'errors' => $e->errors(),
+            'request' => $request->all()
         ]);
 
-        // Mendapatkan mahasiswa berdasarkan NIM
-        $mahasiswa = Mahasiswa::where('nim', $request->nim)->first();
+        return response()->json([
+            'success' => false,
+            'message' => $e->errors()
+        ], 422);
+    } catch (\Exception $e) {
+        // Rollback the transaction in case of error
+        DB::rollBack();
 
-        // Membuat data IRS baru
-        $irs = new Irs();
-        $irs->nim = $request->nim;
-        $irs->nama = $mahasiswa->nama;
-        $irs->semester = $request->semester;
-        $irs->kode_mk = $request->kode_mk;
-        $irs->nama_mk = $request->nama_mk;
-        $irs->kelas = $request->kelas;
-        $irs->sks = $request->sks;
-        $irs->status = false; // Belum disetujui
-        $irs->tanggal_pengajuan = Carbon::now();
-        $irs->mahasiswa_id = $mahasiswa->id;
-        
-        $irs->save();
+        // Log the error with full details
+        Log::error('IRS Submission Error', [
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+            'request' => $request->all()
+        ]);
 
-        return redirect()->route('irs.create')->with('success', 'IRS berhasil diajukan');
+        return response()->json([
+            'success' => false,
+            'message' => 'Gagal menyimpan Rencana Studi: ' . $e->getMessage()
+        ], 500);
     }
-//     public function simpanIrs(Request $request)
-// {
-//     $validatedData = $request->validate([
-//         'mata_kuliah_id' => 'required|exists:mata_kuliahs,id',
-//         'mahasiswa_id' => 'required|exists:mahasiswas,id',
-//     ]);
-
-//     // Simpan data ke tabel IRS
-//     DB::table('irs')->insert([
-//         'mahasiswa_id' => $validatedData['mahasiswa_id'],
-//         'mata_kuliah_id' => $validatedData['mata_kuliah_id'],
-//         'created_at' => now(),
-//         'updated_at' => now(),
-//     ]);
-
-//     return response()->json(['message' => 'IRS berhasil disimpan']);
-// }
-
+}
 }

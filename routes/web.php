@@ -20,7 +20,7 @@ Route::middleware(["guest"])->group(function () {
     Route::post("/login", [SesiController::class,"login"]) -> name('login');
 });
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth', 'web'], function () {
     Route::post("/select-role", [SesiController::class,"selectRole"]) -> name('select-role');
 
     //Mahasiswa
@@ -31,13 +31,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/lihatIRS-mahasiswa', [MahasiswaController::class, "lihatIRS_mahasiswa"]) -> name('mahasiswa.lihatIRS');
     Route::get('/lihatKHS-mahasiswa', [MahasiswaController::class, "lihatKHS_mahasiswa"]) -> name('mahasiswa.lihatKHS');
     Route::get('/buatIRS-mahasiswa', [MahasiswaController::class, "buatIRS_mahasiswa"]) -> name('mahasiswa.buatIRS');
-    Route::get("/buatIRS-mahasiswa", [JadwalController::class, "buatIRS_mahasiswa"]) -> name('mahasiswa.buatIRS');
     Route::get('/irs/create', [IRSController::class, 'create'])->name('irs.create');
     Route::post('/simpan-irs', [IrsController::class, 'simpanIrs'])->name('simpan.irs');
-
+    
     Route::post('/irs', [IRSController::class, 'store'])->name('irs.store');
     Route::get("/jadwalkuliah-mahasiswa", [MahasiswaController::class, "jadwalkuliah_mahasiswa"]) -> name('mahasiswa.jadwalkuliah');
     Route::get('/transkrip-mahasiswa', [MahasiswaController::class, "transkrip_mahasiswa"]);
+    
+    Route::get("/buatIRS-mahasiswa", [JadwalController::class, "buatIRS_mahasiswa"]) -> name('mahasiswa.buatIRS');
+    Route::post('/submit-irs', [IrsController::class, 'submitIRS'])->name('irs.submit');
 
     
     //Dekan
