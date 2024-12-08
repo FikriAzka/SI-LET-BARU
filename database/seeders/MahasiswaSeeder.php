@@ -49,7 +49,7 @@ class MahasiswaSeeder extends Seeder
                 'total_sks' => '100',
                 'sks' => '24',
                 'status' => 'Aktif',// masih aktif
-                'angkatan' => 2022,
+                'angkatan' => 2023,
                 'no_hp' => '089876543210',
                 'program_studi_id' => 2,
                 'fakultas_id' => 2,

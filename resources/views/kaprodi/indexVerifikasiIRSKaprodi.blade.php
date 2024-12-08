@@ -14,37 +14,16 @@
       Angkatan
      </label>
      <select class="border border-gray-300 rounded p-2" id="angkatan">
-      <option>
-       -Pilih Angkatan-
-      </option>
-      <option>
-       2024
-      </option>
+      <option value="">-Pilih Angkatan-</option>
+      @foreach($angkatan as $tahun)
+         <option value="{{ $tahun->angkatan }}">{{ $tahun->angkatan }}</option>
+      @endforeach
      </select>
-    </div>
-    <div>
-     <label class="block text-gray-700" for="kelas">
-      Kelas
-     </label>
-     <select class="border border-gray-300 rounded p-2" id="kelas">
-      <option>
-       -Pilih Kelas-
-      </option>
-      <option>
-       A
-      </option>
-     </select>
-     <a href="verifikasiIRS-kaprodi2">
-       <button class="fas fa-search ml-5">
-       </button>
-     </a>
     </div>
    </div>
    <p class="text-gray-500 text-center mt-8">
     ~ Pilih angkatan dan kelas terlebih dahulu ~
    </p>
   </div>
- </div>
+</div>
 @endsection
-
-  

@@ -65,13 +65,14 @@ Route::group(['middleware' => 'auth', 'web'], function () {
     Route::get("/penyusunanjadwalkuliah-kaprodi", [KaprodiController::class, "penyusunanjadwalkuliah_kaprodi"]) -> name('kaprodi.penyusunanjadwalkuliah');
     Route::get("/penyusunanjadwalkuliah-kaprodi3", [KaprodiController::class, "penyusunanjadwalkuliah_kaprodi3"]) -> name('kaprodi.penyusunanjadwalkuliah3');
     Route::get("/penyusunanjadwalkuliah-kaprodi4", [KaprodiController::class, "penyusunanjadwalkuliah_kaprodi4"]) -> name('kaprodi.penyusunanjadwalkuliah3');
-    Route::get("/verifikasiIRS-kaprodi", [KaprodiController::class, "verifikasiIRS_kaprodi"]);
+    Route::get("/verifikasiIRS-kaprodi", [KaprodiController::class, "verifikasiIRS"])->name('verifikasiIRS');
     Route::get("/verifikasiIRS-kaprodi2", [KaprodiController::class, "verifikasiIRS_kaprodi2"]);
     // Route::get('jadwal/create', [JadwalController::class, 'create'])->name('jadwal.create');
     Route::get("/penyusunanjadwalkuliah-kaprodi2", [JadwalController::class, 'index']) -> name('kaprodi.penyusunanjadwalkuliah2');
     // Route::post('jadwal', [JadwalController::class, 'store'])->name('jadwal.store');
     // Route::post('jadwal/create', [JadwalController::class, 'create'])->name('jadwal.create');
     Route::post('/mata-kuliahs/store', [MataKuliahController::class, 'store'])->name('mata_kuliahs.store');
+
 
 
     // Route::get('kalendar', [ScheduleController::class, 'index'])->name('kalendar.index');
