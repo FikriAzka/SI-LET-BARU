@@ -30,9 +30,11 @@ class JadwalController extends Controller
             return redirect()->back()->with('error', 'Data IPS mahasiswa tidak tersedia.');
         }
         
-        $jadwals = Jadwal::where('semester', $semester)->where('status', 'Disetujui')->get();
-        // $jadwals = Jadwal::all();
+        // $jadwals = Jadwal::where('semester', $semester)->where('status', 'Disetujui')->get();
+        $jadwals = Jadwal::all();
         $irsDipilih = Irs::select('jadwal_id')->where('nim', $mahasiswa->nim)->get();
+
+        
         // dd($irsDipilih);
 
         $mataKuliahs = MataKuliah::where('semester', $semester)->get();
@@ -43,7 +45,7 @@ class JadwalController extends Controller
 
         // dd($mataKuliahs);
 
-        return view('mahasiswa.indexbuatIRSMahasiswa', compact('jadwals', 'mataKuliahs', 'mahasiswa', 'ruangs', 'matkulAll'));
+        return view('mahasiswa.indexbuatIRSMahasiswa', compact('jadwals', 'mataKuliahs', 'mahasiswa', 'ruangs', 'matkulAll', 'irsDipilih'));
     }
 
     public function index()
