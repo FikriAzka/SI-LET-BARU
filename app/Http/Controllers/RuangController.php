@@ -136,5 +136,10 @@ class RuangController extends Controller
 
         return redirect()->route('dekan.penyetujuanruangkuliah')->with('error', 'Ruangan telah ditolak!');
     }
-    
+    public function approveAll(Request $request)
+    {
+        $ruanganIds = $request->input('ruangans', []);
+        Ruang::whereIn('id', $ruanganIds)->update(['status' => 'approved']);
+        return redirect()->back()->with('success', 'Semua ruangan berhasil disetujui!');
+    }
 }

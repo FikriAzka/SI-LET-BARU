@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Suppor\Facades\Auth;
+use App\Models\Mahasiswa;
 
 class KaprodiController extends Controller
 {
@@ -27,5 +28,12 @@ class KaprodiController extends Controller
     }
     function verifikasiIRS_kaprodi2(){
         return view('kaprodi/indexVerifikasiIRSKaprodi2');
+    }
+    public function verifikasiIRS()
+    {
+        // Mengambil daftar angkatan unik dari tabel Mahasiswa
+        $angkatan = Mahasiswa::select('angkatan')->distinct()->orderBy('angkatan', 'desc')->get();
+        // dd($angkatan);
+        return view('kaprodi.indexVerifikasiIRSKaprodi', compact('angkatan'));
     }
 }
