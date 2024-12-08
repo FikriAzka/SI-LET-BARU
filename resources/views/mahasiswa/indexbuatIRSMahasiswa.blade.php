@@ -153,8 +153,7 @@
                                                     data-mk-id="{{ $jadwal->mataKuliah->id }}">
                                                     Hapus
                                                 </button>
-                                            </div>
-                                            
+                                            </div>    
                                         </div>
                                     </div>
                                 @endif
@@ -171,7 +170,222 @@
 <script>
 let totalSKS = 0;
 const maxSKS = 24;
-let selectedCourses = new Set();
+let selectedCourses = new Set(); // Untuk melacak mata kuliah yang dipilih
+let scheduleMap = {}; // Untuk melacak jadwal yang dipilih (key: "day-time")
+
+document.querySelectorAll('.tambah-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        const sks = parseInt(this.dataset.sks);
+        const mkId = this.dataset.mkId;
+
+        const day = this.closest('.calendar-cell').dataset.day;
+        const time = this.closest('.calendar-cell').dataset.time;
+        const scheduleKey = `${day}-${time}`; // Identifikasi jadwal dengan "day-time"
+
+        // Cek apakah jadwal sudah ada di waktu yang sama
+        if (scheduleMap[scheduleKey]) {
+            alert('Jadwal ini sudah terisi. Pilih jadwal lain.');
+            return;
+        }
+
+        // Cek apakah mata kuliah sudah dipilih
+        if (selectedCourses.has(mkId)) {
+            alert('Anda sudah memilih jadwal untuk mata kuliah ini. Pilih mata kuliah yang lain.');
+            return;
+        }
+
+        if (totalSKS + sks > maxSKS) {
+            alert(`Total SKS tidak boleh melebihi ${maxSKS}`);
+            return;
+        }
+
+        // Tambahkan jadwal dan update data
+        totalSKS += sks;
+        selectedCourses.add(mkId);
+        scheduleMap[scheduleKey] = mkId; // Tandai jadwal terisi
+        document.getElementById('totalSKS').textContent = totalSKS;
+
+        // Update UI
+        const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
+        if (selectedMatakuliah) {
+            selectedMatakuliah.classList.add('selected');
+            const statusElement = selectedMatakuliah.querySelector('.status');
+            statusElement.textContent = 'Terpilih';
+            statusElement.classList.remove('text-red-600');
+            statusElement.classList.add('text-green-600');
+        }
+
+        alert(`Mata kuliah berhasil ditambahkan! Total SKS: ${totalSKS}`);
+    });
+});
+
+document.querySelectorAll('.hapus-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        const sks = parseInt(this.dataset.sks);
+        const mkId = this.dataset.mkId;
+
+        const day = this.closest('.calendar-cell').dataset.day;
+        const time = this.closest('.calendar-cell').dataset.time;
+        const scheduleKey = `${day}-${time}`; // Identifikasi jadwal dengan "day-time"
+
+        if (!selectedCourses.has(mkId)) {
+            alert('Mata kuliah ini belum dipilih.');
+            return;
+        }
+
+        // Hapus jadwal dan update data
+        totalSKS -= sks;
+        selectedCourses.delete(mkId);
+        delete scheduleMap[scheduleKey]; // Lepas tanda jadwal
+        document.getElementById('totalSKS').textContent = totalSKS;
+
+        // Update UI
+        const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
+        if (selectedMatakuliah) {
+            selectedMatakuliah.classList.remove('selected');
+            const statusElement = selectedMatakuliah.querySelector('.status');
+            statusElement.textContent = 'Belum Terpilih';
+            statusElement.classList.remove('text-green-600');
+            statusElement.classList.add('text-red-600');
+        }
+
+        alert(`Mata kuliah berhasil dihapus! Total SKS: ${totalSKS}`);
+    });
+});
+
+// document.querySelectorAll('.tambah-btn').forEach(button => {
+//     button.addEventListener('click', function () {
+//         const sks = parseInt(this.dataset.sks);
+//         const mkId = this.dataset.mkId;
+//         const time = this.dataset.time;
+//         const day = this.dataset.day;
+
+//         // Periksa apakah jadwal pada waktu dan hari ini sudah ada
+//         if (selectedSchedules[`${day}-${time}`]) {
+//             alert('Anda sudah memilih jadwal di waktu ini. Pilih jadwal lain.');
+//             return;
+//         }
+
+//         if (totalSKS + sks > maxSKS) {
+//             alert(`Total SKS tidak boleh melebihi ${maxSKS}`);
+//             return;
+//         }
+
+//         // Tambahkan jadwal ke daftar terpilih
+//         totalSKS += sks;
+//         selectedSchedules[`${day}-${time}`] = mkId; // Tandai waktu dan hari dengan mata kuliah yang dipilih
+//         selectedCourses.add(mkId);
+//         document.getElementById('totalSKS').textContent = totalSKS;
+
+//         const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
+//         if (selectedMatakuliah) {
+//             selectedMatakuliah.classList.add('selected');
+//             const statusElement = selectedMatakuliah.querySelector('.status');
+//             statusElement.textContent = 'Terpilih';
+//             statusElement.classList.remove('text-red-600');
+//             statusElement.classList.add('text-green-600');
+//         }
+
+//         alert(`Mata kuliah berhasil ditambahkan! Total SKS: ${totalSKS}`);
+//     });
+// });
+
+// document.querySelectorAll('.hapus-btn').forEach(button => {
+//     button.addEventListener('click', function () {
+//         const sks = parseInt(this.dataset.sks);
+//         const mkId = this.dataset.mkId;
+//         const time = this.dataset.time;
+//         const day = this.dataset.day;
+
+//         if (!selectedCourses.has(mkId)) {
+//             alert('Mata kuliah ini belum dipilih.');
+//             return;
+//         }
+
+//         totalSKS -= sks;
+//         delete selectedSchedules[`${day}-${time}`]; // Hapus tanda waktu dan hari
+//         selectedCourses.delete(mkId);
+//         document.getElementById('totalSKS').textContent = totalSKS;
+
+//         const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
+//         if (selectedMatakuliah) {
+//             selectedMatakuliah.classList.remove('selected');
+//             const statusElement = selectedMatakuliah.querySelector('.status');
+//             statusElement.textContent = 'Belum Terpilih';
+//             statusElement.classList.remove('text-green-600');
+//             statusElement.classList.add('text-red-600');
+//         }
+
+//         alert(`Mata kuliah berhasil dihapus! Total SKS: ${totalSKS}`);
+//     });
+// });
+
+
+// document.querySelectorAll('.tambah-btn').forEach(button => {
+//     button.addEventListener('click', function () {
+//         const sks = parseInt(this.dataset.sks);
+//         const mkId = this.dataset.mkId;
+
+//         // Cek apakah mata kuliah sudah dipilih
+//         if (selectedCourses.has(mkId)) {
+//             alert('Anda sudah memilih jadwal untuk mata kuliah ini. Pilih mata kuliah yang lain.');
+//             return;
+//         }
+
+//         if (totalSKS + sks > maxSKS) {
+//             alert(`Total SKS tidak boleh melebihi ${maxSKS}`);
+//             return;
+//         }
+
+//         totalSKS += sks;
+//         selectedCourses.add(mkId); // Tambahkan ID mata kuliah ke Set
+//         document.getElementById('totalSKS').textContent = totalSKS;
+
+//         // Temukan kolom "Pilih Mata Kuliah" terkait
+//         const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
+//         if (selectedMatakuliah) {
+//             selectedMatakuliah.classList.add('selected');
+//             const statusElement = selectedMatakuliah.querySelector('.status');
+//             statusElement.textContent = 'Terpilih';
+//             statusElement.classList.remove('text-red-600');
+//             statusElement.classList.add('text-green-600');
+//         }
+
+//         alert(`Mata kuliah berhasil ditambahkan! Total SKS: ${totalSKS}`);
+//     });
+// });
+
+// document.querySelectorAll('.hapus-btn').forEach(button => {
+//     button.addEventListener('click', function () {
+//         const sks = parseInt(this.dataset.sks);
+//         const mkId = this.dataset.mkId;
+
+//         if (!selectedCourses.has(mkId)) {
+//             alert('Mata kuliah ini belum dipilih.');
+//             return;
+//         }
+
+//         totalSKS -= sks;
+//         selectedCourses.delete(mkId); // Hapus ID mata kuliah dari Set
+//         document.getElementById('totalSKS').textContent = totalSKS;
+
+//         // Temukan kolom "Pilih Mata Kuliah" terkait
+//         const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
+//         if (selectedMatakuliah) {
+//             selectedMatakuliah.classList.remove('selected');
+//             const statusElement = selectedMatakuliah.querySelector('.status');
+//             statusElement.textContent = 'Belum Terpilih';
+//             statusElement.classList.remove('text-green-600');
+//             statusElement.classList.add('text-red-600');
+//         }
+
+//         alert(`Mata kuliah berhasil dihapus! Total SKS: ${totalSKS}`);
+//     });
+// });
+
+// let totalSKS = 0;
+// const maxSKS = 24;
+// let selectedCourses = new Set();
 
 // document.querySelectorAll('.matakuliah').forEach(item => {
 //    item.addEventListener('click', function() {
@@ -210,75 +424,75 @@ let selectedCourses = new Set();
 //    });
 // });
 
-function updateScheduleDisplay() {
-   document.querySelectorAll('.jadwal-item').forEach(item => {
-       const mkName = item.dataset.mkName;
-       if(selectedCourses.has(mkName)) {
-           item.style.display = 'block';
-       } else {
-           item.style.display = 'none';
-       }
-   });
-}
+// function updateScheduleDisplay() {
+//    document.querySelectorAll('.jadwal-item').forEach(item => {
+//        const mkName = item.dataset.mkName;
+//        if(selectedCourses.has(mkName)) {
+//            item.style.display = 'block';
+//        } else {
+//            item.style.display = 'none';
+//        }
+//    });
+// }
 
-document.querySelectorAll('.tambah-btn').forEach(button => {
-    button.addEventListener('click', function () {
-        const sks = parseInt(this.dataset.sks);
-        const mkId = this.dataset.mkId;
+// document.querySelectorAll('.tambah-btn').forEach(button => {
+//     button.addEventListener('click', function () {
+//         const sks = parseInt(this.dataset.sks);
+//         const mkId = this.dataset.mkId;
 
-        if (totalSKS + sks > maxSKS) {
-            alert(`Total SKS tidak boleh melebihi ${maxSKS}`);
-            return;
-        }
+//         if (totalSKS + sks > maxSKS) {
+//             alert(`Total SKS tidak boleh melebihi ${maxSKS}`);
+//             return;
+//         }
 
-        totalSKS += sks;
-        document.getElementById('totalSKS').textContent = totalSKS;
+//         totalSKS += sks;
+//         document.getElementById('totalSKS').textContent = totalSKS;
 
-        // Temukan kolom "Pilih Mata Kuliah" terkait
-        const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
-        if (selectedMatakuliah) {
-            selectedMatakuliah.classList.add('selected');
-            const statusElement = selectedMatakuliah.querySelector('.status');
-            statusElement.textContent = 'Terpilih';
-            statusElement.classList.remove('text-red-600');
-            statusElement.classList.add('text-green-600');
-        }
+//         // Temukan kolom "Pilih Mata Kuliah" terkait
+//         const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
+//         if (selectedMatakuliah) {
+//             selectedMatakuliah.classList.add('selected');
+//             const statusElement = selectedMatakuliah.querySelector('.status');
+//             statusElement.textContent = 'Terpilih';
+//             statusElement.classList.remove('text-red-600');
+//             statusElement.classList.add('text-green-600');
+//         }
 
-        alert(`Mata kuliah berhasil ditambahkan! Total SKS: ${totalSKS}`);
-    });
-});
+//         alert(`Mata kuliah berhasil ditambahkan! Total SKS: ${totalSKS}`);
+//     });
+// });
 
-document.querySelectorAll('.hapus-btn').forEach(button => {
-    button.addEventListener('click', function () {
-        const sks = parseInt(this.dataset.sks);
-        const mkId = this.dataset.mkId;
+// document.querySelectorAll('.hapus-btn').forEach(button => {
+//     button.addEventListener('click', function () {
+//         const sks = parseInt(this.dataset.sks);
+//         const mkId = this.dataset.mkId;
 
-        if (totalSKS - sks < 0) {
-            alert('Tidak ada mata kuliah yang bisa dihapus.');
-            return;
-        }
+//         if (totalSKS - sks < 0) {
+//             alert('Tidak ada mata kuliah yang bisa dihapus.');
+//             return;
+//         }
 
-        totalSKS -= sks;
-        document.getElementById('totalSKS').textContent = totalSKS;
+//         totalSKS -= sks;
+//         document.getElementById('totalSKS').textContent = totalSKS;
 
-        // Temukan kolom "Pilih Mata Kuliah" terkait
-        const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
-        if (selectedMatakuliah) {
-            selectedMatakuliah.classList.remove('selected');
-            const statusElement = selectedMatakuliah.querySelector('.status');
-            statusElement.textContent = 'Belum Terpilih';
-            statusElement.classList.remove('text-green-600');
-            statusElement.classList.add('text-red-600');
-        }
+//         // Temukan kolom "Pilih Mata Kuliah" terkait
+//         const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
+//         if (selectedMatakuliah) {
+//             selectedMatakuliah.classList.remove('selected');
+//             const statusElement = selectedMatakuliah.querySelector('.status');
+//             statusElement.textContent = 'Belum Terpilih';
+//             statusElement.classList.remove('text-green-600');
+//             statusElement.classList.add('text-red-600');
+//         }
 
-        // Hapus highlight jadwal di kalender
-        document.querySelectorAll(`.calendar-cell[data-mk-id="${mkId}"]`).forEach(cell => {
-            cell.classList.remove('jadwal-highlight');
-        });
+//         // Hapus highlight jadwal di kalender
+//         document.querySelectorAll(`.calendar-cell[data-mk-id="${mkId}"]`).forEach(cell => {
+//             cell.classList.remove('jadwal-highlight');
+//         });
 
-        alert(`Mata kuliah berhasil dihapus! Total SKS: ${totalSKS}`);
-    });
-});
+//         alert(`Mata kuliah berhasil dihapus! Total SKS: ${totalSKS}`);
+//     });
+// });
 
 
 
