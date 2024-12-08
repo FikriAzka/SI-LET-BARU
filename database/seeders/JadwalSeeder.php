@@ -19,7 +19,7 @@ class JadwalSeeder extends Seeder
                 'dosen_id'=> '1',
                 'hari'=> 'Senin',
                 'ruangan'=> 'A001',
-                'kuota_kelas'=> '5',
+                'kuota_kelas'=> '4',
                 'sks'=> '4',
                 'sifat'=> 'Wajib',
                 'kelas'=> 'A',

@@ -154,30 +154,36 @@ class IRSController extends Controller
 //  */
 private function tentukanPrioritas($mahasiswa, $jadwal)
 {
+    // Validasi data
+    if (!isset($mahasiswa->nim, $mahasiswa->semester, $jadwal->id, $jadwal->semester)) {
+        throw new \InvalidArgumentException('Data mahasiswa atau jadwal tidak valid.');
+    }
+
     // Mahasiswa Baru: Mata kuliah di semester mereka
     if ($mahasiswa->semester == $jadwal->semester) {
         return 1;
     }
 
-    // Mahasiswa Semester Atas Belum Mengambil: Belum pernah mengambil sebelumnya
+    // Mahasiswa Semester Atas Belum Mengambil
     $irsSebelumnya = Irs::where('nim', $mahasiswa->nim)
         ->where('jadwal_id', $jadwal->id)
         ->first();
-    if (is_null($irsSebelumnya)) {
+
+    if (is_null($irsSebelumnya) && $mahasiswa->semester > $jadwal->semester) {
         return 2;
     }
 
-    // Mahasiswa Mengulang: Mata kuliah yang sudah pernah diambil
-    if ($irsSebelumnya->status_lulus == 'tidak lulus') {
+    // Mahasiswa Mengulang
+    if ($irsSebelumnya && $irsSebelumnya->status_lulus == 'tidak lulus') {
         return 3;
     }
 
-    // Mahasiswa Perbaikan: Memperbaiki nilai
-    if ($irsSebelumnya->status_lulus == 'lulus' && $irsSebelumnya->nilai < 60) {
+    // Mahasiswa Perbaikan
+    if ($irsSebelumnya && $irsSebelumnya->status_lulus == 'lulus' && $irsSebelumnya->nilai < 60) {
         return 4;
     }
 
-    // Mahasiswa Mengambil Semester Atas: Mata kuliah di semester lebih tinggi
+    // Mahasiswa Mengambil Semester Atas
     if ($mahasiswa->semester < $jadwal->semester) {
         return 5;
     }
@@ -185,6 +191,7 @@ private function tentukanPrioritas($mahasiswa, $jadwal)
     // Default Prioritas Terendah
     return 10;
 }
+
 
 public function submitIRS(Request $request)
 {
@@ -272,7 +279,5 @@ public function submitIRS(Request $request)
         ], 500);
     }
 }
-
-
 
 }
