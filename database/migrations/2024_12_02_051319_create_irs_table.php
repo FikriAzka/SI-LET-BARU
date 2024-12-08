@@ -21,8 +21,6 @@ return new class extends Migration
             $table->timestamps();
 
             // Foreign Key Constraints
-            $table->foreign('nim')->references('id')->on('mahasiswas')->onDelete('cascade'); 
-            $table->foreign('jadwal_id')->references('id')->on('jadwals')->onDelete('cascade');
         });
         
 

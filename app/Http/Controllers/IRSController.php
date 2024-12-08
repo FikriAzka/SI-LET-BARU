@@ -13,41 +13,47 @@ class IRSController extends Controller
 {
 public function submitIRS(Request $request)
 {
+    $mhs = Mahasiswa::where('user_id',  Auth::user()->id)->first();
+    // return response()->json($mhs);
     // Add detailed logging
     Log::info('IRS Submission Request:', $request->all());
 
     try {
-        // Validate the incoming request
-        $validatedData = $request->validate([
-            'total_sks' => 'required|numeric',
-            'semester' => 'required|string',
-            'schedules' => 'required|array',
-            'schedules.*.mata_kuliah_id' => 'required|exists:mata_kuliahs,id',
-            'schedules.*.jadwal_id' => 'required|exists:jadwals,id',
-        ]);
+        $check = Irs::where('nim', $mhs->nim)
+        ->where('jadwal_id', $request->jadwal_id)
+        ->where('semester', $mhs->semester)
+        ->first();
+
+        // return response()->json($check);
 
         // Start a database transaction
-        DB::beginTransaction();
-
+        // return response()->json($request->jadwal_id);
         // Create a new IRS record
-        $irs = Irs::create([
-            'nim' => Auth::user()->nim, // Adjust based on your user model
-            'jadwal_id' => $validatedData['schedules'][0]['jadwal_id'], // Store first jadwal_id if needed
-            'semester' => $validatedData['semester'],
-            'status' => 'Menunggu Persetujuan',
-        ]);
+        if(is_null($check)){
+            $irs = Irs::create([
+                'nim' => $mhs->nim, // Adjust based on your user model
+                'jadwal_id' => intval($request->jadwal_id),
+                'semester' => $mhs->semester,
+                'prioritas' => 1,
+                'status' => 'pending'
+            ]);
+            // return response()->json($irs);
+            // Log successful submission
+            Log::info('IRS Submission Successful', ['irs_id' => $irs->id]);
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Rencana Studi berhasil disimpan',
+                'irs_id' => $irs->id
+            ]);
+        } else{
+            return response()->json([
+                'success' => true,
+                'message' => 'Rencana Studi berhasil disimpan',
+                'irs_id' => $check->id
+            ]);
+        }
 
-        // Commit the transaction
-        DB::commit();
-
-        // Log successful submission
-        Log::info('IRS Submission Successful', ['irs_id' => $irs->id]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Rencana Studi berhasil disimpan',
-            'irs_id' => $irs->id
-        ]);
     } catch (\Illuminate\Validation\ValidationException $e) {
         // Handle validation errors
         DB::rollBack();

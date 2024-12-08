@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Irs extends Model
 {
     use HasFactory;
+
+    protected $table = 'irs';
     protected $fillable = [
         'nim',
         'jadwal_id',

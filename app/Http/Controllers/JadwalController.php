@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Irs;
 use App\Models\Dosen;
 use App\Models\Ruang;
 use App\Models\Jadwal;
@@ -31,6 +32,9 @@ class JadwalController extends Controller
         
         $jadwals = Jadwal::where('semester', $semester)->where('status', 'Disetujui')->get();
         // $jadwals = Jadwal::all();
+        $irsDipilih = Irs::select('jadwal_id')->where('nim', $mahasiswa->nim)->get();
+        // dd($irsDipilih);
+
         $mataKuliahs = MataKuliah::where('semester', $semester)->get();
         $matkulAll = MataKuliah::all();
         $ruangs = Ruang::where('status', 'Disetujui')

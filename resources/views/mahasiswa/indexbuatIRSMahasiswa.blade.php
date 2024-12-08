@@ -64,13 +64,8 @@
                     <span id="maxSKS" class="font-bold"></span>
                 </p>
             </div>
-            <form id="irsForm" action="{{ route('irs.submit') }}" method="POST">
-                @csrf
-                <button id="submitButton"
-                    class="mt-4 bg-green-500 text-white px-4 py-2 rounded-md shadow hover:bg-green-600">
-                    Kirim Rencana Studi
-                </button>
-            </form>
+            
+
 
         </div>
 
@@ -195,7 +190,6 @@
                                                             data-sks="{{ $jadwal->mataKuliah->sks }}"
                                                             data-mk-id="{{ $jadwal->mataKuliah->id }}"
                                                             data-jadwal-id="{{ $jadwal->id }}"> <!-- Tambahkan ini -->
-                                                            >
 
                                                             Tambah
                                                         </button>
@@ -220,10 +214,12 @@
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         let totalSKS = 0;
         let maxSKS = 0;
-        let selectedCourses = new Set(); // Untuk melacak mata kuliah yang dipilih
+        let selectedCourses = new Set();
+        let selectedJadwal = new Set(); // Untuk melacak mata kuliah yang dipilih
         let scheduleMap = {}; // Untuk melacak jadwal yang dipilih (key: "day-time")
 
         // Sembunyikan semua jadwal di kalender saat halaman dimuat
@@ -263,6 +259,7 @@
             button.addEventListener('click', function() {
                 const sks = parseInt(this.dataset.sks);
                 const mkId = this.dataset.mkId;
+                const jadwal = this.dataset.jadwalId;
 
                 const day = this.closest('.calendar-cell').dataset.day;
                 const time = this.closest('.calendar-cell').dataset.time;
@@ -302,21 +299,61 @@
                 // Tambahkan jadwal dan update data
                 totalSKS += sks;
                 selectedCourses.add(mkId);
+                selectedJadwal.add(jadwal);
+                console.log(jadwal);
+                console.log(selectedJadwal);
                 scheduleMap[scheduleKey] = mkId; // Tandai jadwal terisi
                 document.getElementById('totalSKS').textContent = totalSKS;
 
-                // Update UI
-                const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
-                if (selectedMatakuliah) {
-                    selectedMatakuliah.classList.add('selected');
-                    const statusElement = selectedMatakuliah.querySelector('.status');
-                    statusElement.textContent = 'Terpilih';
-                    statusElement.classList.remove('text-red-600');
-                    statusElement.classList.add('text-green-600');
-                }
+                // Kirim data ke server menggunakan AJAX
+                $.ajax({
+                    url: '/submit-irs', // Sesuaikan dengan URL route di Laravel
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                            'content') // CSRF Token untuk keamanan
+                    },
+                    data: {
+                        jadwal_id: jadwal // Kirim jadwal_id sebagai array
+                    },
 
-                // Tampilkan alert jika mata kuliah berhasil ditambahkan
-                alert(`Mata kuliah berhasil ditambahkan! Total SKS: ${totalSKS}`);
+                    success: function(response) {
+                        console.log(response);
+                        if (response.success) {
+                            const selectedMatakuliah = document.querySelector(
+                                `.matakuliah[data-mk-id="${mkId}"]`);
+                            if (selectedMatakuliah) {
+                                selectedMatakuliah.classList.add('selected');
+                                const statusElement = selectedMatakuliah.querySelector(
+                                    '.status');
+                                statusElement.textContent = 'Terpilih';
+                                statusElement.classList.remove('text-red-600');
+                                statusElement.classList.add('text-green-600');
+                            }
+
+                            // Tampilkan alert jika mata kuliah berhasil ditambahkan
+                            alert(`Mata kuliah berhasil ditambahkan! Total SKS: ${totalSKS}`);
+                            // alert(response.message); // Tampilkan pesan sukses
+                            // location.reload(); // Reload halaman setelah berhasil
+                        } else {
+                            alert('Gagal menyimpan IRS. Silakan coba lagi.');
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            // Tampilkan pesan validasi dari server
+                            const errors = xhr.responseJSON.message || 'Kesalahan validasi.';
+                            alert(errors);
+                        } else {
+                            alert('Terjadi kesalahan. Silakan coba lagi.');
+                        }
+                    },
+
+                });
+
+
+                // Update UI
+
             });
         });
 
@@ -423,102 +460,6 @@
 
                 console.log(`Mata kuliah dengan ID ${mkId} dibatalkan.`);
             }
-        });
-        document.getElementById('submitButton').addEventListener('click', function() {
-            // Collect selected schedules
-            const selectedSchedules = [];
-
-            // Find all selected schedule elements
-            document.querySelectorAll('.calendar-cell .relative.group.selected').forEach(item => {
-                const tambahBtn = item.querySelector('.tambah-btn');
-                if (tambahBtn) {
-                    const mkId = tambahBtn.dataset.mkId;
-                    const jadwalId = tambahBtn.dataset.jadwalId;
-
-                    // Ensure we have both course and schedule IDs
-                    if (mkId && jadwalId) {
-                        selectedSchedules.push({
-                            mata_kuliah_id: mkId,
-                            jadwal_id: jadwalId
-                        });
-                    }
-                }
-            });
-
-            // Debug: Log selected schedules
-            console.log('Selected Schedules:', selectedSchedules);
-
-            // Validate selections
-            if (selectedSchedules.length === 0) {
-                alert('Pilih setidaknya satu jadwal sebelum mengirim Rencana Studi.');
-                return;
-            }
-
-            // Confirm submission
-            const confirmed = confirm(`Anda akan mengirim ${selectedSchedules.length} mata kuliah. Lanjutkan?`);
-            if (!confirmed) {
-                return;
-            }
-
-            // Debug: Log totalSKS
-            console.log('Total SKS:', totalSKS);
-
-            // Prepare data for submission
-            const submissionData = {
-                total_sks: totalSKS,
-                semester: document.getElementById('semester').textContent.trim(),
-                schedules: selectedSchedules
-            };
-
-            // Debug: Log submission data
-            console.log('Submission Data:', submissionData);
-
-            // Send data to server
-            fetch('/irs/submit', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                            'content')
-                    },
-                    body: JSON.stringify(submissionData)
-                })
-                .then(response => {
-                    // Debug: Log full response
-                    console.log('Response status:', response.status);
-                    console.log('Response headers:', response.headers);
-
-                    // More detailed error handling
-                    if (response.status === 422) {
-                        return response.json().then(errorData => {
-                            console.error('Validation Errors:', errorData);
-                            alert('Validasi gagal: ' + JSON.stringify(errorData.message));
-                            throw new Error('Validation Failed');
-                        });
-                    }
-
-                    if (!response.ok) {
-                        throw new Error('Server responded with status: ' + response.status);
-                    }
-
-                    return response.json();
-                })
-                .then(data => {
-                    // Debug: Log success response
-                    console.log('Success data:', data);
-
-                    if (data.success) {
-                        alert('Rencana Studi berhasil disimpan!');
-                        window.location.href = '/buatIRS-mahasiswa';
-                    } else {
-                        alert(data.message || 'Gagal menyimpan Rencana Studi');
-                    }
-                })
-                .catch(error => {
-                    // Debug: Log detailed error
-                    console.error('Detailed Error:', error);
-                    alert('Terjadi kesalahan: ' + error.message);
-                });
         });
     </script>
 @endsection
