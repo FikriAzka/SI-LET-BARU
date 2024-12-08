@@ -55,6 +55,13 @@ Route::group(['middleware' => 'auth', 'web'], function () {
     Route::post('/jadwal/{id}/reject', [JadwalController::class, 'rejectJadwal'])->name('jadwal.reject');
     Route::get('/jadwal/{id}/cek', [JadwalController::class, 'cekJadwal'])->name('jadwal.cek');
 
+    Route::get('/get-irs-by-angkatan', [KaprodiController::class, 'getIrsByAngkatan']);
+    // Rute untuk mengubah status IRS menjadi 'Disetujui'
+    Route::put('/update-status-irs/{id}', [KaprodiController::class, 'updateStatus'])->name('updateStatus');
+
+
+
+
     // Route untuk halaman Penyetujuan Jadwal Kuliah
     Route::get('/jadwal-penyetujuan', [JadwalController::class, 'showJadwalPenyetujuan'])->name('dekan.penyetujuanjadwalkuliah');
 
