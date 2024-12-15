@@ -39,7 +39,118 @@ class RuangSeeder extends Seeder
                 'kapasitas' => '30',
                 'program_studi_id' => 1 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
             ],
-            
+            [
+                'noruang' => 'A101',
+                'blokgedung' => 'A',
+                'lantai' => '1',
+                'fungsi' => 'Ruang Kuliah',
+                'kapasitas' => '30',
+                'program_studi_id' => 1 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
+            ],
+            [
+                'noruang' => 'A102',
+                'blokgedung' => 'A',
+                'lantai' => '1',
+                'fungsi' => 'Ruang Kuliah',
+                'kapasitas' => '30',
+                'program_studi_id' => 1 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
+            ],
+            [
+                'noruang' => 'A103',
+                'blokgedung' => 'A',
+                'lantai' => '1',
+                'fungsi' => 'Ruang Kuliah',
+                'kapasitas' => '30',
+                'program_studi_id' => 1 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
+            ],
+            [
+                'noruang' => 'A201',
+                'blokgedung' => 'A',
+                'lantai' => '2',
+                'fungsi' => 'Ruang Kuliah',
+                'kapasitas' => '30',
+                'program_studi_id' => 1 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
+            ],
+            [
+                'noruang' => 'A202',
+                'blokgedung' => 'A',
+                'lantai' => '2',
+                'fungsi' => 'Ruang Kuliah',
+                'kapasitas' => '30',
+                'program_studi_id' => 1 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
+            ],
+            [
+                'noruang' => 'A203',
+                'blokgedung' => 'A',
+                'lantai' => '2',
+                'fungsi' => 'Ruang Kuliah',
+                'kapasitas' => '30',
+                'program_studi_id' => 1 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
+            ],
+            [
+                'noruang' => 'A301',
+                'blokgedung' => 'A',
+                'lantai' => '3',
+                'fungsi' => 'Ruang Kuliah',
+                'kapasitas' => '30',
+                'program_studi_id' => 1 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
+            ],
+            [
+                'noruang' => 'A302',
+                'blokgedung' => 'A',
+                'lantai' => '3',
+                'fungsi' => 'Ruang Kuliah',
+                'kapasitas' => '30',
+                'program_studi_id' => 1 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
+            ],
+            [
+                'noruang' => 'B101',
+                'blokgedung' => 'B',
+                'lantai' => '1',
+                'fungsi' => 'Ruang Kuliah',
+                'kapasitas' => '30',
+                'program_studi_id' => 1 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
+            ],
+            [
+                'noruang' => 'B102',
+                'blokgedung' => 'B',
+                'lantai' => '1',
+                'fungsi' => 'Ruang Kuliah',
+                'kapasitas' => '30',
+                'program_studi_id' => 1 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
+            ],
+            [
+                'noruang' => 'B103',
+                'blokgedung' => 'B',
+                'lantai' => '1',
+                'fungsi' => 'Ruang Kuliah',
+                'kapasitas' => '30',
+                'program_studi_id' => 1 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
+            ],
+            [
+                'noruang' => 'B201',
+                'blokgedung' => 'B',
+                'lantai' => '2',
+                'fungsi' => 'Ruang Kuliah',
+                'kapasitas' => '30',
+                'program_studi_id' => 1 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
+            ],
+            [
+                'noruang' => 'B202',
+                'blokgedung' => 'B',
+                'lantai' => '2',
+                'fungsi' => 'Ruang Kuliah',
+                'kapasitas' => '30',
+                'program_studi_id' => 1 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
+            ],
+            [
+                'noruang' => 'B203',
+                'blokgedung' => 'B',
+                'lantai' => '2',
+                'fungsi' => 'Ruang Kuliah',
+                'kapasitas' => '30',
+                'program_studi_id' => 1 // Pastikan ID ini sesuai dengan data di tabel `program_studis`
+            ],
         ]);
     }
 }
