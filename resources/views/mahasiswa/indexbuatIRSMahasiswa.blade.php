@@ -87,21 +87,10 @@
                     </select>
                 </div>
 
-                {{-- <div class="mb-4">
-                    <label for="mk-filter" class="block text-sm font-medium text-gray-700">Filter Mata Kuliah</label>
-                    <select id="mk-filter"
-                        class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                        <option value="" disabled selected class="text-gray-500">--Mata Kuliah--</option>
-
-                        @foreach ($matkulAll as $mk)
-                            <option value="{{ $mk->id }}">{{ $mk->nama_mk }}</option>
-                        @endforeach
-                    </select>
-                </div> --}}
-
+            
 
                 <div class="mb-4" id="matakuliahList">
-                    @foreach ($mataKuliahs as $mk)
+                    @foreach ($matkulAll as $mk)
                         <div class="matakuliah bg-gray-100 p-2 rounded-lg mb-2 hidden" data-sks="{{ $mk->sks }}"
                             data-mk-id="{{ $mk->id }}" data-mk-name="{{ $mk->nama_mk }}"
                             data-mk-semester="{{ $mk->semester }}">
@@ -230,12 +219,14 @@
     <script>
         let totalSKS = 0;
         let maxSKS = 0;
+        
         let selectedCourses = new Set();
         let selectedJadwal = new Set(); // Untuk melacak mata kuliah yang dipilih
         let scheduleMap = {}; // Untuk melacak jadwal yang dipilih (key: "day-time")
 
         // Sembunyikan semua jadwal di kalender saat halaman dimuat
         document.addEventListener('DOMContentLoaded', function() {
+            
             document.querySelectorAll('.calendar-cell .relative.group').forEach(item => {
                 item.classList.add('hidden');
             });
@@ -277,8 +268,12 @@
                 const time = this.closest('.calendar-cell').dataset.time;
                 const scheduleKey = `${day}-${time}`; // Identifikasi jadwal dengan "day-time"
 
+                
                 // Tambahkan class .selected ke elemen kalender
                 const calendarElement = this.closest('.relative.group');
+
+                
+
                 if (calendarElement) {
                     calendarElement.classList.add('selected');
                 }
@@ -336,8 +331,7 @@
                                 `.matakuliah[data-mk-id="${mkId}"]`);
                             if (selectedMatakuliah) {
                                 selectedMatakuliah.classList.add('selected');
-                                const statusElement = selectedMatakuliah.querySelector(
-                                    '.status');
+                                const statusElement = selectedMatakuliah.querySelector('.status');
                                 statusElement.textContent = 'Terpilih';
                                 statusElement.classList.remove('text-red-600');
                                 statusElement.classList.add('text-green-600');
