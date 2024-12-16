@@ -31,7 +31,10 @@ class JadwalController extends Controller
         }
         
         // $jadwals = Jadwal::where('semester', $semester)->where('status', 'Disetujui')->get();
-        $jadwals = Jadwal::all();
+        // $jadwals = Jadwal::all();
+        $jadwals = Jadwal::with('irs')->get();
+
+
         $irsDipilih = Irs::select('jadwal_id')->where('nim', $mahasiswa->nim)->get();
 
         

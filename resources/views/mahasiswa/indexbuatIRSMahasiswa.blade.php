@@ -197,12 +197,15 @@
                                                         </button>
 
 
+                                                        <!-- Tombol Hapus -->
                                                         <button type="button"
                                                             class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 hapus-btn"
                                                             data-sks="{{ $jadwal->mataKuliah->sks }}"
-                                                            data-mk-id="{{ $jadwal->mataKuliah->id }}">
+                                                            data-mk-id="{{ $jadwal->mataKuliah->id }}" data-irs-id="">
+                                                            <!-- Awalnya kosong -->
                                                             Hapus
                                                         </button>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -221,10 +224,77 @@
     <script>
         let totalSKS = 0;
         let maxSKS = 0;
-        
+
         let selectedCourses = new Set();
         let selectedJadwal = new Set(); // Untuk melacak mata kuliah yang dipilih
         let scheduleMap = {}; // Untuk melacak jadwal yang dipilih (key: "day-time")
+
+        function saveState() {
+            const state = {
+                totalSKS,
+                selectedCourses: Array.from(selectedCourses),
+                scheduleMap,
+            };
+            localStorage.setItem('scheduleState', JSON.stringify(state));
+        }
+
+
+        function loadIRSFromDatabase() {
+            fetch('/get-irs-data')
+                .then(response => response.json())
+                .then(data => {
+                    // Reset state sebelumnya
+                    totalSKS = 0;
+                    selectedCourses.clear();
+                    scheduleMap = {};
+
+                    // Proses data IRS dari database
+                    data.forEach(irs => {
+                        // Tambahkan mata kuliah ke selectedCourses
+                        selectedCourses.add(irs.mata_kuliah_id);
+
+                        // Update total SKS
+                        totalSKS += irs.mata_kuliah.sks;
+
+                        // Update schedule map
+                        // Anda perlu menambahkan logika untuk mengambil jadwal dari database
+                        scheduleMap[`${irs.hari}-${irs.jam}`] = {
+                            start: irs.jam_mulai,
+                            end: irs.jam_selesai
+                        };
+                    });
+
+                    // Update UI
+                    document.getElementById('totalSKS').textContent = totalSKS;
+
+                    // Perbarui tampilan mata kuliah yang dipilih
+                    selectedCourses.forEach(mkId => {
+                        const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
+                        if (selectedMatakuliah) {
+                            selectedMatakuliah.classList.add('selected');
+                            const statusElement = selectedMatakuliah.querySelector('.status');
+                            statusElement.textContent = 'Terpilih';
+                            statusElement.classList.remove('text-red-600');
+                            statusElement.classList.add('text-green-600');
+                        }
+                    });
+
+                    // Perbarui tampilan kalender
+                    Object.keys(scheduleMap).forEach(key => {
+                        const [day, time] = key.split('-');
+                        const calendarElement = document.querySelector(
+                            `.calendar-cell[data-day="${day}"][data-time="${time}"] .relative.group`
+                        );
+                        if (calendarElement) {
+                            calendarElement.classList.add('selected');
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error('Gagal memuat data IRS:', error);
+                });
+        }
+
 
 
         function timeToMinutes(time) {
@@ -232,14 +302,17 @@
             return hours * 60 + minutes; // Mengonversi jam dan menit menjadi total menit
         }
 
-        function isTimeOverlap(newStart, newEnd, existingSchedules) {
+        function isTimeOverlap(newStart, newEnd, existingSchedules, day) {
             const newStartMinutes = timeToMinutes(newStart);
             const newEndMinutes = timeToMinutes(newEnd);
 
             console.log('Checking overlap with:', newStartMinutes, newEndMinutes);
 
-            // Loop untuk cek overlap dengan jadwal yang sudah ada
+            // Loop untuk cek overlap dengan jadwal pada hari yang sama
             for (let key in existingSchedules) {
+                const [existingDay, existingTime] = key.split('-');
+                if (existingDay !== day) continue; // Hanya cek jadwal pada hari yang sama
+
                 const {
                     start,
                     end
@@ -247,7 +320,8 @@
                 const existingStartMinutes = timeToMinutes(start);
                 const existingEndMinutes = timeToMinutes(end);
 
-                console.log(`Existing schedule: Start=${existingStartMinutes}, End=${existingEndMinutes}`);
+                console.log(
+                    `Existing schedule: Day=${existingDay}, Start=${existingStartMinutes}, End=${existingEndMinutes}`);
 
                 if ((newStartMinutes >= existingStartMinutes && newStartMinutes < existingEndMinutes) ||
                     (newEndMinutes > existingStartMinutes && newEndMinutes <= existingEndMinutes) ||
@@ -263,7 +337,11 @@
 
 
 
+
         document.addEventListener('DOMContentLoaded', function() {
+            loadIRSFromDatabase();
+
+
             // Sembunyikan semua jadwal di kalender saat halaman dimuat
             document.querySelectorAll('.calendar-cell .relative.group').forEach(item => {
                 item.classList.add('hidden');
@@ -313,10 +391,13 @@
                 console.log('Selected start and end times:', newStart, newEnd); // Debugging
 
                 // Cek apakah waktu tumpang tindih dengan jadwal yang sudah ada
-                if (isTimeOverlap(newStart, newEnd, scheduleMap)) {
-                    alert('Jadwal ini bertumpang tindih dengan jadwal lain. Pilih jadwal lain.');
+                if (isTimeOverlap(newStart, newEnd, scheduleMap, day)) {
+                    alert(
+                        'Jadwal ini bertumpang tindih dengan jadwal lain pada hari yang sama. Pilih jadwal lain.'
+                    );
                     return;
                 }
+
 
                 // Cek apakah jadwal sudah ada di waktu yang sama
                 if (scheduleMap[scheduleKey]) {
@@ -343,14 +424,16 @@
                 }
 
                 // Gray out other unselected schedule buttons for the same course
+                // Gray out tombol lain kecuali tombol ini
                 document.querySelectorAll(`.tambah-btn[data-mk-id="${mkId}"]`).forEach(btn => {
+                    const parentButton = btn.closest('.relative')?.querySelector('button');
                     if (btn !== this) {
-                        const parentButton = btn.closest('.relative')?.querySelector('button');
-                        if (parentButton) {
-                            parentButton.classList.add('opacity-30', 'pointer-events-none');
-                        }
+                        parentButton.classList.add('opacity-30', 'pointer-events-none');
+                    } else {
+                        parentButton.classList.remove('opacity-30', 'pointer-events-none');
                     }
                 });
+
 
                 // Tambahkan jadwal dan update data
                 totalSKS += sks;
@@ -360,6 +443,8 @@
                     start: newStart,
                     end: newEnd
                 };
+                saveState(); // Simpan state ke localStorage
+
                 document.getElementById('totalSKS').textContent = totalSKS;
 
                 // Kirim data ke server menggunakan AJAX
@@ -374,11 +459,20 @@
                     },
                     success: function(response) {
                         if (response.success) {
+                            // Ambil tombol Hapus terkait dan perbarui data-irs-id
+                            const hapusButton = calendarElement.querySelector('.hapus-btn');
+                            if (hapusButton) {
+                                hapusButton.dataset.irsId = response
+                                    .irs_id; // IRS ID dari response server
+                            }
+
+                            // Update UI
                             const selectedMatakuliah = document.querySelector(
                                 `.matakuliah[data-mk-id="${mkId}"]`);
                             if (selectedMatakuliah) {
                                 selectedMatakuliah.classList.add('selected');
-                                const statusElement = selectedMatakuliah.querySelector('.status');
+                                const statusElement = selectedMatakuliah.querySelector(
+                                    '.status');
                                 statusElement.textContent = 'Terpilih';
                                 statusElement.classList.remove('text-red-600');
                                 statusElement.classList.add('text-green-600');
@@ -389,6 +483,7 @@
                             alert('Gagal menyimpan IRS. Silakan coba lagi.');
                         }
                     },
+
                     error: function(xhr) {
                         if (xhr.status === 422) {
                             const errors = xhr.responseJSON.message || 'Kesalahan validasi.';
@@ -401,10 +496,9 @@
             });
         });
 
-
-
         document.querySelectorAll('.hapus-btn').forEach(button => {
             button.addEventListener('click', function() {
+                const irsId = this.dataset.irsId; // Ambil IRS ID dari tombol
                 const sks = parseInt(this.dataset.sks);
                 const mkId = this.dataset.mkId;
 
@@ -412,38 +506,85 @@
                 const time = this.closest('.calendar-cell').dataset.time;
                 const scheduleKey = `${day}-${time}`;
 
-                if (!selectedCourses.has(mkId)) {
-                    alert('Mata kuliah ini belum dipilih.');
+
+                // Pastikan IRS ID ada
+                if (!irsId) {
+                    alert('Mata kuliah ini belum ditambahkan ke IRS.');
                     return;
                 }
 
-                // Remove gray out effect for the specific course
-                document.querySelectorAll(`.tambah-btn[data-mk-id="${mkId}"]`).forEach(btn => {
-                    const parentButton = btn.closest('.relative')?.querySelector('button');
-                    if (parentButton) {
-                        parentButton.classList.remove('opacity-30', 'pointer-events-none');
-                    }
-                });
-
-                // Hapus jadwal dan update data
-                totalSKS -= sks;
-                selectedCourses.delete(mkId);
-                delete scheduleMap[scheduleKey];
-                document.getElementById('totalSKS').textContent = totalSKS;
-
-                // Update UI
-                const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
-                if (selectedMatakuliah) {
-                    selectedMatakuliah.classList.remove('selected');
-                    const statusElement = selectedMatakuliah.querySelector('.status');
-                    statusElement.textContent = 'Belum Terpilih';
-                    statusElement.classList.remove('text-green-600');
-                    statusElement.classList.add('text-red-600');
+                // Konfirmasi penghapusan
+                if (!confirm('Apakah Anda yakin ingin menghapus mata kuliah ini?')) {
+                    return;
                 }
 
-                alert(`Mata kuliah berhasil dihapus! Total SKS: ${totalSKS}`);
+                // Kirim permintaan DELETE ke server
+                fetch(`/irs/${irsId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Gagal menghapus data dari server.');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            alert('Mata kuliah berhasil dihapus!');
+
+                            // Reset tombol Hapus
+                            this.dataset.irsId = '';
+
+                            // Remove gray out effect for the specific course
+                            // Aktifkan kembali semua tombol untuk mata kuliah ini
+                            document.querySelectorAll(`.tambah-btn[data-mk-id="${mkId}"]`).forEach(
+                                btn => {
+                                    const parentButton = btn.closest('.relative')?.querySelector(
+                                        'button');
+                                    if (parentButton) {
+                                        parentButton.classList.remove('opacity-30',
+                                            'pointer-events-none');
+                                    }
+                                });
+
+
+                            // Hapus jadwal dan update data
+                            totalSKS -= sks;
+                            selectedCourses.delete(mkId);
+                            delete scheduleMap[scheduleKey];
+                            saveState(); // Simpan state ke localStorage
+
+                            document.getElementById('totalSKS').textContent = totalSKS;
+
+                            // Update UI
+                            const selectedMatakuliah = document.querySelector(
+                                `.matakuliah[data-mk-id="${mkId}"]`);
+                            if (selectedMatakuliah) {
+                                selectedMatakuliah.classList.remove('selected');
+                                const statusElement = selectedMatakuliah.querySelector('.status');
+                                statusElement.textContent = 'Belum Terpilih';
+                                statusElement.classList.remove('text-green-600');
+                                statusElement.classList.add('text-red-600');
+                            }
+
+                            alert(`Mata kuliah berhasil dihapus! Total SKS: ${totalSKS}`);
+
+                        } else {
+                            alert('Gagal menghapus mata kuliah. ' + (data.message || 'Coba lagi.'));
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        alert('Terjadi kesalahan saat menghapus data. Coba lagi nanti.');
+                    });
             });
         });
+
+
 
         let selectedMkIds = new Set();
 
@@ -499,6 +640,9 @@
             }
         });
     </script>
+
+
+
 
 
 @endsection
