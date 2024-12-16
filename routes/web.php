@@ -40,6 +40,8 @@ Route::group(['middleware' => 'auth', 'web'], function () {
     
     Route::get("/buatIRS-mahasiswa", [JadwalController::class, "buatIRS_mahasiswa"]) -> name('mahasiswa.buatIRS');
     Route::post('/submit-irs', [IrsController::class, 'submitIRS'])->name('irs.submit');
+    Route::post('/approve-irs', [IrsController::class, 'approveIrs']);
+
  
 
     
@@ -75,6 +77,8 @@ Route::group(['middleware' => 'auth', 'web'], function () {
     Route::get("/penyusunanjadwalkuliah-kaprodi4", [KaprodiController::class, "penyusunanjadwalkuliah_kaprodi4"]) -> name('kaprodi.penyusunanjadwalkuliah3');
     Route::get("/verifikasiIRS-kaprodi", [KaprodiController::class, "verifikasiIRS"])->name('verifikasiIRS');
     Route::get("/verifikasiIRS-kaprodi2", [KaprodiController::class, "verifikasiIRS_kaprodi2"]);
+    Route::post('/approve-irs', [IrsController::class, 'approveIrs']);
+
     // Route::get('jadwal/create', [JadwalController::class, 'create'])->name('jadwal.create');
     Route::get("/penyusunanjadwalkuliah-kaprodi2", [JadwalController::class, 'index']) -> name('kaprodi.penyusunanjadwalkuliah2');
     // Route::post('jadwal', [JadwalController::class, 'store'])->name('jadwal.store');
