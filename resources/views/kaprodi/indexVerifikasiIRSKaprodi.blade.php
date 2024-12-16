@@ -40,104 +40,112 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <script>
-        $('#angkatan').on('change', function() {
-            var angkatan = $(this).val();
-            if (angkatan) {
-                $.ajax({
-                    url: '/get-irs-by-angkatan', // URL sesuai dengan rute yang Anda tentukan
-                    type: 'GET',
-                    data: {
-                        angkatan: angkatan
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            var irsData = response.data;
+       $('#angkatan').on('change', function() {
+    var angkatan = $(this).val();
+    if (angkatan) {
+        $.ajax({
+            url: '/get-irs-by-angkatan', // URL sesuai dengan rute yang Anda tentukan
+            type: 'GET',
+            data: {
+                angkatan: angkatan
+            },
+            success: function(response) {
+                if (response.success) {
+                    var irsData = response.data;
 
-                            // Jika ada data IRS
-                            if (irsData.length > 0) {
-                                var tableHtml =
-                                    '<table class="min-w-full table-auto border-collapse border border-gray-300">';
-                                tableHtml +=
-                                    '<thead><tr><th class="border border-gray-300 px-4 py-2">NIM</th><th class="border border-gray-300 px-4 py-2">Jadwal ID</th><th class="border border-gray-300 px-4 py-2">Semester</th><th class="border border-gray-300 px-4 py-2">Prioritas</th><th class="border border-gray-300 px-4 py-2">Status</th><th class="border border-gray-300 px-4 py-2">Aksi</th></tr></thead>';
-                                tableHtml += '<tbody>';
+                    // Jika ada data IRS
+                    if (irsData.length > 0) {
+                        var tableHtml =
+                            '<table class="min-w-full table-auto border-collapse border border-gray-300">';
+                        tableHtml +=
+                            '<thead><tr><th class="border border-gray-300 px-4 py-2">NIM</th><th class="border border-gray-300 px-4 py-2">Status</th><th class="border border-gray-300 px-4 py-2">Aksi</th></tr></thead>';
+                        tableHtml += '<tbody>';
 
-                                // Loop untuk mengisi data IRS
-                                irsData.forEach(function(irs) {
-                                    tableHtml += '<tr>';
-                                    tableHtml +=
-                                        '<td class="border border-gray-300 px-4 py-2">' + irs
-                                        .nim + '</td>';
-                                    tableHtml +=
-                                        '<td class="border border-gray-300 px-4 py-2">' + irs
-                                        .jadwal_id + '</td>';
-                                    tableHtml +=
-                                        '<td class="border border-gray-300 px-4 py-2">' + irs
-                                        .semester + '</td>';
-                                    tableHtml +=
-                                        '<td class="border border-gray-300 px-4 py-2">' + irs
-                                        .prioritas + '</td>';
-                                    tableHtml +=
-                                        '<td class="border border-gray-300 px-4 py-2">' + irs
-                                        .status + '</td>';
-
-                                    // Kolom Aksi dengan ikon check
-                                    tableHtml +=
-                                        '<td class="border border-gray-300 px-4 py-2 text-center">';
-                                    if (irs.status === 'pending') {
-                                        tableHtml +=
-                                            '<button class="approve-btn text-green-500" data-id="' +
-                                            irs.id +
-                                            '"><i class="fas fa-check"></i> Disetujui</button>';
-                                    }
-                                    tableHtml += '</td>';
-                                    tableHtml += '</tr>';
-                                });
-
-                                tableHtml += '</tbody></table>';
-
-                                // Masukkan HTML tabel ke dalam #irs-table
-                                $('#irs-table').html(tableHtml);
-                            } else {
-                                // Jika tidak ada data IRS
-                                $('#irs-table').html(
-                                    '<p class="text-red-500 text-center">Tidak ada data IRS untuk angkatan ini.</p>'
-                                );
+                        // Loop untuk mengelompokkan data IRS per NIM
+                        var groupedData = {};
+                        irsData.forEach(function(irs) {
+                            if (!groupedData[irs.nim]) {
+                                groupedData[irs.nim] = [];
                             }
-                        } else {
-                            alert('Gagal mengambil data IRS.');
+                            groupedData[irs.nim].push(irs);
+                        });
+
+                        for (var nim in groupedData) {
+                            var nimData = groupedData[nim];
+
+                            // Tentukan status final: jika ada 'pending', gunakan 'pending'; jika tidak, gunakan 'approved'
+                            var finalStatus = nimData.some(irs => irs.status === 'pending') 
+                                ? 'pending' 
+                                : 'approved';
+
+                            tableHtml += '<tr>';
+                            tableHtml += '<td class="border border-gray-300 px-4 py-2">' + nim + '</td>';
+                            tableHtml += '<td class="border border-gray-300 px-4 py-2">' + finalStatus + '</td>';
+
+                            // Kolom Aksi
+                            tableHtml += '<td class="border border-gray-300 px-4 py-2 text-center">';
+                            if (finalStatus === 'pending') {
+                                tableHtml +=
+                                    '<button class="approve-btn bg-green-500 text-white px-4 py-2 rounded" data-nim="' + 
+                                    nim + '">Approve</button>';
+                            } else {
+                                tableHtml += '<span class="text-gray-500">Approved</span>';
+                            }
+                            tableHtml += '</td>';
+
+                            tableHtml += '</tr>';
                         }
+
+                        tableHtml += '</tbody></table>';
+
+                        // Masukkan HTML tabel ke dalam #irs-table
+                        $('#irs-table').html(tableHtml);
+
+                        // Tambahkan event listener untuk tombol Approve
+                        $('.approve-btn').on('click', function() {
+                            var nim = $(this).data('nim');
+                            approveIrs(nim);
+                        });
+                    } else {
+                        // Jika tidak ada data IRS
+                        $('#irs-table').html(
+                            '<p class="text-red-500 text-center">Tidak ada data IRS untuk angkatan ini.</p>'
+                        );
                     }
-                });
-            } else {
-                // Jika tidak ada angkatan yang dipilih
-                $('#irs-table').html(
-                    '<p class="text-gray-500 text-center">~ Pilih angkatan dan kelas terlebih dahulu ~</p>');
+                } else {
+                    alert('Gagal mengambil data IRS.');
+                }
             }
         });
+    } else {
+        // Jika tidak ada angkatan yang dipilih
+        $('#irs-table').html(
+            '<p class="text-gray-500 text-center">~ Pilih angkatan dan kelas terlebih dahulu ~</p>'
+        );
+    }
+});
 
-        // Menambahkan event listener pada tombol approve
-        $(document).on('click', '.approve-btn', function() {
-            var irsId = $(this).data('id'); // Mengambil ID IRS dari data-id
+function approveIrs(nim) {
+    $.ajax({
+        url: '/approve-irs', // URL endpoint untuk mengubah status
+        type: 'POST',
+        data: {
+            nim: nim,
+            _token: '{{ csrf_token() }}' // Token CSRF untuk keamanan
+        },
+        success: function(response) {
+            if (response.success) {
+                alert('IRS mahasiswa berhasil disetujui.');
+                $('#angkatan').trigger('change'); // Refresh data tabel
+            } else {
+                alert('Gagal menyetujui IRS mahasiswa.');
+            }
+        },
+        error: function() {
+            alert('Terjadi kesalahan. Silakan coba lagi.');
+        }
+    });
+}
 
-            // Kirim request untuk mengubah status IRS menjadi 'Disetujui'
-            $.ajax({
-                url: '/update-status-irs/' + irsId, // Ganti dengan URL yang sesuai
-                type: 'PUT', // Pastikan menggunakan metode yang benar
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-                        'content') // Ambil token dari meta tag
-                },
-                success: function(response) {
-                    alert('IRS disetujui!');
-                    location.reload(); // Reload untuk memperbarui status di halaman
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error Status: ", status);
-                    console.error("Error Message: ", error);
-                    console.error("Response: ", xhr.responseText);
-                    alert('Terjadi kesalahan saat mengubah status.');
-                }
-            });
-        });
     </script>
 @endsection
