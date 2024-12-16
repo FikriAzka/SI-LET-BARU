@@ -37,7 +37,14 @@ class JadwalController extends Controller
         
         // dd($irsDipilih);
 
-        $mataKuliahs = MataKuliah::where('semester', $semester)->get();
+        // Filter mata kuliah berdasarkan semester
+        if ($semester % 2 != 0) {
+            // Semester ganjil (1, 3, 5, ...)
+            $mataKuliahs = MataKuliah::whereIn('semester', [1, 3, 5, 7])->get();
+        } else {
+            // Semester genap (2, 4, 6, ...)
+            $mataKuliahs = MataKuliah::whereIn('semester', [2, 4, 6, 8])->get();
+        }
         $matkulAll = MataKuliah::all();
         $ruangs = Ruang::where('status', 'Disetujui')
             ->where('keterangan', 'tersedia')
