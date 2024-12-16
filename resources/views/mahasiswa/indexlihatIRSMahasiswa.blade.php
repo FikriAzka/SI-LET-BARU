@@ -64,9 +64,6 @@
                                             <th class="border px-4 py-2 text-left">Mata Kuliah</th>
                                             <th class="border px-4 py-2 text-center w-24">Kode MK</th>
                                             <th class="border px-4 py-2 text-center w-20">SKS</th>
-                                            <th class="border px-4 py-2 text-center w-32">Status</th>
-                                            <th class="border px-4 py-2 text-center w-24">Nilai</th>
-                                            <th class="border px-4 py-2 text-center w-32">Dosen</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -81,17 +78,7 @@
                                                 <td class="border px-4 py-2 text-center">
                                                     {{ $item->jadwal->sks ?? '-' }}
                                                 </td>
-                                                <td class="border px-4 py-2 text-center">
-                                                    <span class="px-2 py-1 rounded-full text-sm {{ $item->status_lulus == 'lulus' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                                        {{ $item->status_lulus ?? '-' }}
-                                                    </span>
-                                                </td>
-                                                <td class="border px-4 py-2 text-center">
-                                                    {{ $item->nilai ?? '-' }}
-                                                </td>
-                                                <td class="border px-4 py-2 text-center">
-                                                    {{ $item->jadwal->dosen->nama ?? 'Data tidak tersedia' }}
-                                                </td>
+                                            
                                             </tr>
                                         @endforeach
                                         <tr class="bg-gray-50 font-medium">
