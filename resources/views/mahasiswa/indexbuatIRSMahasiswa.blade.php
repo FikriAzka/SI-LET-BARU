@@ -221,6 +221,7 @@
     <script>
         let totalSKS = 0;
         let maxSKS = 0;
+        
         let selectedCourses = new Set();
         let selectedJadwal = new Set(); // Untuk melacak mata kuliah yang dipilih
         let scheduleMap = {}; // Untuk melacak jadwal yang dipilih (key: "day-time")
@@ -377,8 +378,7 @@
                                 `.matakuliah[data-mk-id="${mkId}"]`);
                             if (selectedMatakuliah) {
                                 selectedMatakuliah.classList.add('selected');
-                                const statusElement = selectedMatakuliah.querySelector(
-                                    '.status');
+                                const statusElement = selectedMatakuliah.querySelector('.status');
                                 statusElement.textContent = 'Terpilih';
                                 statusElement.classList.remove('text-red-600');
                                 statusElement.classList.add('text-green-600');

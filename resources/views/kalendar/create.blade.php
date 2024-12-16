@@ -69,11 +69,16 @@
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
                     <label for="jam_mulai" class="block text-gray-700">Jam Mulai</label>
-                    <input type="time" name="jam_mulai" id="jam_mulai" class="w-full p-2 border border-gray-300 rounded" onchange="calculateEndTime()">
+                    <input type="time" name="jam_mulai" id="jam_mulai" 
+                           class="w-full p-2 border border-gray-300 rounded" 
+                           min="07:00" max="22:00" 
+                           onchange="validateTimeRange(); calculateEndTime()">
                 </div>
                 <div>
                     <label for="jam_selesai" class="block text-gray-700">Jam Selesai</label>
-                    <input type="time" name="jam_selesai" id="jam_selesai" class="w-full p-2 border border-gray-300 rounded" readonly>
+                    <input type="time" name="jam_selesai" id="jam_selesai" 
+                           class="w-full p-2 border border-gray-300 rounded" 
+                           readonly>
                 </div>
             </div>
             <div class="mb-4">
@@ -121,35 +126,56 @@
 @endsection
 
 @section('js')
-    <script>
-        function calculateEndTime() {
-            const mataKuliahSelect = document.getElementById('mata_kuliah_id');
-            const jamMulai = document.getElementById('jam_mulai').value;
-            const jamSelesai = document.getElementById('jam_selesai');
+<script>
+    // Fungsi untuk memvalidasi jam mulai berada dalam rentang waktu yang diperbolehkan
+    function validateTimeRange() {
+        const jamMulaiInput = document.getElementById('jam_mulai');
+        const jamMulaiValue = jamMulaiInput.value;
 
-            if (mataKuliahSelect && jamMulai) {
-                // Get the selected option
-                const selectedOption = mataKuliahSelect.options[mataKuliahSelect.selectedIndex];
-                const sks = selectedOption.getAttribute('data-sks');
+        // Jika jam mulai di luar rentang, tampilkan pesan dan reset input
+        if (jamMulaiValue < "07:00" || jamMulaiValue > "22:00") {
+            alert("Jam mulai harus di antara 07:00 pagi hingga 22:00 malam.");
+            jamMulaiInput.value = ""; // Reset nilai input
+        }
+    }
 
-                if (sks) {
-                    // 1 SKS = 50 minutes
-                    const minutesToAdd = sks * 50;
+    // Fungsi untuk menghitung jam selesai berdasarkan jam mulai dan SKS
+    function calculateEndTime() {
+        const mataKuliahSelect = document.getElementById('mata_kuliah_id');
+        const jamMulaiInput = document.getElementById('jam_mulai');
+        const jamSelesaiInput = document.getElementById('jam_selesai');
+        const jamMulaiValue = jamMulaiInput.value;
 
-                    // Convert start time to minutes
-                    const [startHours, startMinutes] = jamMulai.split(':').map(Number);
-                    const startTotalMinutes = startHours * 60 + startMinutes;
+        if (mataKuliahSelect && jamMulaiValue) {
+            // Ambil informasi SKS dari mata kuliah yang dipilih
+            const selectedOption = mataKuliahSelect.options[mataKuliahSelect.selectedIndex];
+            const sks = selectedOption.getAttribute('data-sks');
 
-                    // Calculate end time
-                    const endTotalMinutes = startTotalMinutes + minutesToAdd;
-                    const endHours = Math.floor(endTotalMinutes / 60);
-                    const endMinutes = endTotalMinutes % 60;
+            if (sks) {
+                // 1 SKS = 50 menit
+                const minutesToAdd = sks * 50;
 
-                    // Format the end time
-                    const formattedEndTime = `${endHours.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}`;
-                    jamSelesai.value = formattedEndTime;
+                // Konversi jam mulai ke menit
+                const [startHours, startMinutes] = jamMulaiValue.split(':').map(Number);
+                const startTotalMinutes = startHours * 60 + startMinutes;
+
+                // Hitung total menit untuk jam selesai
+                const endTotalMinutes = startTotalMinutes + minutesToAdd;
+                const endHours = Math.floor(endTotalMinutes / 60);
+                const endMinutes = endTotalMinutes % 60;
+
+                // Format jam selesai ke HH:MM
+                const formattedEndTime = `${endHours.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}`;
+
+                // Validasi jika jam selesai melewati batas 22:00 malam
+                if (formattedEndTime > "19:00") {
+                    alert("Jam selesai tidak boleh lebih dari 19:00 malam.");
+                    jamSelesaiInput.value = ""; // Reset input
+                } else {
+                    jamSelesaiInput.value = formattedEndTime;
                 }
             }
         }
-    </script>
+    }
+</script>
 @endsection
