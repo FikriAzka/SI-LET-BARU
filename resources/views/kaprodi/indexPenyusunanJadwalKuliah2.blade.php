@@ -214,7 +214,7 @@
             function openCreateModal() {
                 const modal = document.getElementById('createModal');
                 modal.classList.remove('hidden');
-                modal.classList.add('flex');x
+                modal.classList.add('flex');
             }
 
             function closeCreateModal() {
