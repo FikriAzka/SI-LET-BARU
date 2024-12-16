@@ -40,8 +40,9 @@
             </div>
             <div class="mb-4">
                 <label for="kuota_kelas" class="block text-gray-700">Kuota Kelas</label>
-                <input type="number" name="kuota_kelas" id="kuota_kelas" class="w-full p-2 border border-gray-300 rounded" required>
+                <input type="number" name="kuota_kelas" id="kuota_kelas" class="w-full p-2 border border-gray-300 rounded" min="1" required>
             </div>
+            
             <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
                     <label for="kelas" class="block text-gray-700">Kelas</label>
