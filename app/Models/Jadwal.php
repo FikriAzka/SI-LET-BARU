@@ -32,6 +32,8 @@ class Jadwal extends Model
    {
        return $this->belongsTo(MataKuliah::class, 'mata_kuliah_id');
    }
+   
+
 
    public function dosen() 
    {
@@ -45,6 +47,6 @@ class Jadwal extends Model
 
    public function irs()
     {
-        return $this->hasMany(Irs::class, 'jadwal_id');
+        return $this->belongsTo(IRS::class);
     }
 }

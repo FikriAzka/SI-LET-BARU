@@ -26,6 +26,12 @@ class Irs extends Model
 
     public function jadwal()
     {
-        return $this->belongsTo(Jadwal::class, 'jadwal_id');
+        return $this->belongsTo(Jadwal::class, 'jadwal_id'); // Pastikan foreign key 'jadwal_id' benar
     }
+
+    public function mataKuliah()
+    {
+        return $this->belongsTo(MataKuliah::class);
+    }
+
 }
