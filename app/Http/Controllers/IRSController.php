@@ -153,6 +153,18 @@ public function approveIrs(Request $request)
     }
 }
 
+public function destroy($id)
+    {
+        try {
+            $irs = IRS::findOrFail($id);
+            $irs->delete();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            Log::error('Error deleting IRS: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Gagal menghapus data.'], 500);
+        }
+    }
 
 public function lihatIRS()
 {
@@ -195,5 +207,14 @@ public function lihatIRS()
     }
 }
 
+public function getIRSData()
+{
+    $mahasiswa = Auth::user(); // Ambil mahasiswa yang sedang login
+    $irsData = IRS::where('mahasiswa_id', $mahasiswa->id)
+        ->with('mataKuliah') // Eager load relasi mata kuliah
+        ->get();
+
+    return response()->json($irsData);
+}
 
 }

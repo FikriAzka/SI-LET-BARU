@@ -229,73 +229,6 @@
         let selectedJadwal = new Set(); // Untuk melacak mata kuliah yang dipilih
         let scheduleMap = {}; // Untuk melacak jadwal yang dipilih (key: "day-time")
 
-        function saveState() {
-            const state = {
-                totalSKS,
-                selectedCourses: Array.from(selectedCourses),
-                scheduleMap,
-            };
-            localStorage.setItem('scheduleState', JSON.stringify(state));
-        }
-
-
-        function loadIRSFromDatabase() {
-            fetch('/get-irs-data')
-                .then(response => response.json())
-                .then(data => {
-                    // Reset state sebelumnya
-                    totalSKS = 0;
-                    selectedCourses.clear();
-                    scheduleMap = {};
-
-                    // Proses data IRS dari database
-                    data.forEach(irs => {
-                        // Tambahkan mata kuliah ke selectedCourses
-                        selectedCourses.add(irs.mata_kuliah_id);
-
-                        // Update total SKS
-                        totalSKS += irs.mata_kuliah.sks;
-
-                        // Update schedule map
-                        // Anda perlu menambahkan logika untuk mengambil jadwal dari database
-                        scheduleMap[`${irs.hari}-${irs.jam}`] = {
-                            start: irs.jam_mulai,
-                            end: irs.jam_selesai
-                        };
-                    });
-
-                    // Update UI
-                    document.getElementById('totalSKS').textContent = totalSKS;
-
-                    // Perbarui tampilan mata kuliah yang dipilih
-                    selectedCourses.forEach(mkId => {
-                        const selectedMatakuliah = document.querySelector(`.matakuliah[data-mk-id="${mkId}"]`);
-                        if (selectedMatakuliah) {
-                            selectedMatakuliah.classList.add('selected');
-                            const statusElement = selectedMatakuliah.querySelector('.status');
-                            statusElement.textContent = 'Terpilih';
-                            statusElement.classList.remove('text-red-600');
-                            statusElement.classList.add('text-green-600');
-                        }
-                    });
-
-                    // Perbarui tampilan kalender
-                    Object.keys(scheduleMap).forEach(key => {
-                        const [day, time] = key.split('-');
-                        const calendarElement = document.querySelector(
-                            `.calendar-cell[data-day="${day}"][data-time="${time}"] .relative.group`
-                        );
-                        if (calendarElement) {
-                            calendarElement.classList.add('selected');
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error('Gagal memuat data IRS:', error);
-                });
-        }
-
-
 
         function timeToMinutes(time) {
             const [hours, minutes] = time.split(':').map(Number);
@@ -339,9 +272,6 @@
 
 
         document.addEventListener('DOMContentLoaded', function() {
-            loadIRSFromDatabase();
-
-
             // Sembunyikan semua jadwal di kalender saat halaman dimuat
             document.querySelectorAll('.calendar-cell .relative.group').forEach(item => {
                 item.classList.add('hidden');
@@ -394,7 +324,7 @@
                 if (isTimeOverlap(newStart, newEnd, scheduleMap, day)) {
                     alert(
                         'Jadwal ini bertumpang tindih dengan jadwal lain pada hari yang sama. Pilih jadwal lain.'
-                    );
+                        );
                     return;
                 }
 
@@ -424,16 +354,14 @@
                 }
 
                 // Gray out other unselected schedule buttons for the same course
-                // Gray out tombol lain kecuali tombol ini
                 document.querySelectorAll(`.tambah-btn[data-mk-id="${mkId}"]`).forEach(btn => {
-                    const parentButton = btn.closest('.relative')?.querySelector('button');
                     if (btn !== this) {
-                        parentButton.classList.add('opacity-30', 'pointer-events-none');
-                    } else {
-                        parentButton.classList.remove('opacity-30', 'pointer-events-none');
+                        const parentButton = btn.closest('.relative')?.querySelector('button');
+                        if (parentButton) {
+                            parentButton.classList.add('opacity-30', 'pointer-events-none');
+                        }
                     }
                 });
-
 
                 // Tambahkan jadwal dan update data
                 totalSKS += sks;
@@ -443,8 +371,6 @@
                     start: newStart,
                     end: newEnd
                 };
-                saveState(); // Simpan state ke localStorage
-
                 document.getElementById('totalSKS').textContent = totalSKS;
 
                 // Kirim data ke server menggunakan AJAX
@@ -540,7 +466,6 @@
                             this.dataset.irsId = '';
 
                             // Remove gray out effect for the specific course
-                            // Aktifkan kembali semua tombol untuk mata kuliah ini
                             document.querySelectorAll(`.tambah-btn[data-mk-id="${mkId}"]`).forEach(
                                 btn => {
                                     const parentButton = btn.closest('.relative')?.querySelector(
@@ -551,13 +476,10 @@
                                     }
                                 });
 
-
                             // Hapus jadwal dan update data
                             totalSKS -= sks;
                             selectedCourses.delete(mkId);
                             delete scheduleMap[scheduleKey];
-                            saveState(); // Simpan state ke localStorage
-
                             document.getElementById('totalSKS').textContent = totalSKS;
 
                             // Update UI
