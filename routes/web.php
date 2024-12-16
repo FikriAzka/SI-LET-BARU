@@ -40,6 +40,8 @@ Route::group(['middleware' => 'auth', 'web'], function () {
     
     Route::get("/buatIRS-mahasiswa", [JadwalController::class, "buatIRS_mahasiswa"]) -> name('mahasiswa.buatIRS');
     Route::post('/submit-irs', [IrsController::class, 'submitIRS'])->name('irs.submit');
+    Route::post('/approve-irs', [IrsController::class, 'approveIrs']);
+
  
 
     

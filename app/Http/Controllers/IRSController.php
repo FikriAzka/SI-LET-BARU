@@ -193,4 +193,6 @@ public function lihatIRS()
         return back()->with('error', 'Terjadi kesalahan saat mengambil data IRS.');
     }
 }
+
+
 }
