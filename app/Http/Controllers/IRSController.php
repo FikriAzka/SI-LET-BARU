@@ -153,4 +153,44 @@ public function approveIrs(Request $request)
 }
 
 
+public function lihatIRS()
+{
+    try {
+        $mahasiswa = Auth::user()->mahasiswa;
+        
+        // Debug info
+        Log::info('Accessing lihatIRS', [
+            'user_id' => Auth::user()->id,
+            'mahasiswa' => $mahasiswa->toArray()
+        ]);
+        
+        $irsList = [];
+        
+        // Query IRS for debugging
+        $allIrs = Irs::where('nim', $mahasiswa->nim)->get();
+        Log::info('All IRS Data:', ['count' => $allIrs->count(), 'data' => $allIrs->toArray()]);
+        
+        for ($i = 1; $i <= 8; $i++) {
+            $query = Irs::where('nim', $mahasiswa->nim)
+                       ->where('semester', $i)
+                       ->with(['jadwal.mataKuliah', 'jadwal.dosen']);
+                       
+            Log::info("Query for semester $i", ['sql' => $query->toSql(), 'bindings' => $query->getBindings()]);
+            
+            $irsList[$i] = $query->get();
+            
+            Log::info("Data for semester $i", ['count' => $irsList[$i]->count()]);
+        }
+        
+        return view('mahasiswa.indexlihatIRSMahasiswa', compact('irsList'));
+        
+    } catch (\Exception $e) {
+        Log::error('Error in lihatIRS', [
+            'message' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+        
+        return back()->with('error', 'Terjadi kesalahan saat mengambil data IRS.');
+    }
+}
 }
