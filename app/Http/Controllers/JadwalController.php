@@ -50,7 +50,6 @@ class JadwalController extends Controller
             ->where('keterangan', 'tersedia')
             ->get();
 
-        // dd($mataKuliahs);
 
         return view('mahasiswa.indexbuatIRSMahasiswa', compact('jadwals', 'mataKuliahs', 'mahasiswa', 'ruangs', 'matkulAll', 'irsDipilih'));
     }
