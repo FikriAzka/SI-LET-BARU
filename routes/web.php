@@ -42,11 +42,15 @@ Route::group(['middleware' => 'auth', 'web'], function () {
     Route::post('/submit-irs', [IrsController::class, 'submitIRS'])->name('irs.submit');
     Route::delete('/irs/{id}', [IRSController::class, 'destroy'])->name('irs.destroy');
     Route::get('/get-irs-data', [IRSController::class, 'getIrsData']);
+    Route::get('/get-irs', [IRSController::class, 'getIRS']);
+
     Route::post('/approve-irs', [IrsController::class, 'approveIrs']);
 
 
 
-
+    
+    Route::get('/mahasiswa/irs/{semester}/download', [IRSController::class, 'downloadIRS'])
+    ->name('mahasiswa.irs.download');
 
     
     //Dekan
@@ -88,6 +92,8 @@ Route::group(['middleware' => 'auth', 'web'], function () {
     // Route::post('jadwal', [JadwalController::class, 'store'])->name('jadwal.store');
     // Route::post('jadwal/create', [JadwalController::class, 'create'])->name('jadwal.create');
     Route::post('/mata-kuliahs/store', [MataKuliahController::class, 'store'])->name('mata_kuliahs.store');
+
+    
 
 
 

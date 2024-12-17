@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\PDF;
+
 use App\Models\Irs;
 use App\Models\Jadwal;
+// use Barryvdh\DomPDF\PDF;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -117,7 +120,6 @@ public function submitIRS(Request $request)
                 'prioritas' => $prioritasBaru,
                 'status' => 'pending',
                 'status_lulus' => $statusLulus, // Tentukan status lulus berdasarkan nilai
-                'nilai' => $nilai, 
             ]);
 
             Log::info('IRS Submission Successful', ['irs_id' => $irs->id]);
@@ -207,14 +209,30 @@ public function lihatIRS()
     }
 }
 
-public function getIRSData()
-{
-    $mahasiswa = Auth::user(); // Ambil mahasiswa yang sedang login
-    $irsData = IRS::where('mahasiswa_id', $mahasiswa->id)
-        ->with('mataKuliah') // Eager load relasi mata kuliah
-        ->get();
+    
 
-    return response()->json($irsData);
+
+    public function downloadIRS($semester)
+{
+    $mahasiswa = Auth::user()->mahasiswa;
+    // Persiapkan data IRS
+    $irsList = [];
+    for ($i = 1; $i <= 8; $i++) {
+        $irsList[$i] = Irs::where('nim', $mahasiswa->nim)
+            ->where('semester', $i)
+            ->with(['jadwal', 'jadwal.mataKuliah', 'jadwal.dosen'])
+            ->get();
+    }
+
+    // Generate PDF dengan menambahkan data Program Studi
+    $pdf = PDF::loadView('mahasiswa.pdf.irs', [
+        'mahasiswa' => $mahasiswa,
+        'semester' => $semester,
+        'irsList' => $irsList,
+    ]);
+
+    // Download PDF
+    return $pdf->download("IRS_Semester_{$semester}.pdf");
 }
 
 }

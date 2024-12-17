@@ -324,7 +324,7 @@
                 if (isTimeOverlap(newStart, newEnd, scheduleMap, day)) {
                     alert(
                         'Jadwal ini bertumpang tindih dengan jadwal lain pada hari yang sama. Pilih jadwal lain.'
-                        );
+                    );
                     return;
                 }
 

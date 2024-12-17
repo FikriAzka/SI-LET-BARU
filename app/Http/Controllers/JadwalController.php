@@ -36,6 +36,7 @@ class JadwalController extends Controller
 
 
         $irsDipilih = Irs::select('jadwal_id')->where('nim', $mahasiswa->nim)->get();
+        
 
         
         // dd($irsDipilih);
