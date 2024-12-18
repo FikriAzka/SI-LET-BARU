@@ -186,7 +186,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-bold">Kapasitas:</label>
-                        <input id="editKapasitas" type="number" name="kapasitas"
+                        <input id="editKapasitas" type="number" name="kapasitas" min="1"
                             class="w-full border rounded p-2 text-sm">
                     </div>
                     <div>
