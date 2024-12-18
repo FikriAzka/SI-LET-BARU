@@ -43,7 +43,7 @@ Route::group(['middleware' => 'auth', 'web'], function () {
     Route::delete('/irs/{id}', [IRSController::class, 'destroy'])->name('irs.destroy');
     Route::get('/get-irs-data', [IRSController::class, 'getIrsData']);
     Route::post('/approve-irs', [IrsController::class, 'approveIrs']);
-
+    Route::get('/mahasiswa/print-irs/{semester}', [IRSController::class, 'printIRS'])->name('mahasiswa.print_irs');
 
 
 
