@@ -24,14 +24,17 @@ class Irs extends Model
         return $this->belongsTo(Mahasiswa::class, 'nim', 'nim');
     }
 
-    public function jadwal()
-    {
-        return $this->belongsTo(Jadwal::class, 'jadwal_id'); // Pastikan foreign key 'jadwal_id' benar
-    }
+   
 
     public function mataKuliah()
     {
-        return $this->belongsTo(MataKuliah::class);
+        return $this->belongsTo(MataKuliah::class, 'mata_kuliah_id');
     }
 
+    public function jadwal()
+    {
+        return $this->belongsTo(Jadwal::class, 'jadwal_id');
+    }
+
+    
 }

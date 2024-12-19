@@ -9,8 +9,9 @@ class DosWal extends Model
     //
     public function mahasiswa()
     {
-        return $this->hasMany(Mahasiswa::class, 'doswal_id');
+        return $this->hasMany(Mahasiswa::class, 'dos_wal_id');
     }
+    
 
     public function dosen()
     {

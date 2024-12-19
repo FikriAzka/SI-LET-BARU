@@ -118,6 +118,7 @@ public function submitIRS(Request $request)
                 'jadwal_id' => $jadwal->id,
                 'semester' => $mhs->semester,
                 'prioritas' => $prioritasBaru,
+                'nilai' => $nilai,
                 'status' => 'pending',
                 'status_lulus' => $statusLulus, // Tentukan status lulus berdasarkan nilai
             ]);
@@ -152,6 +153,38 @@ public function approveIrs(Request $request)
         return response()->json(['success' => true, 'message' => 'IRS berhasil disetujui']);
     } else {
         return response()->json(['success' => false, 'message' => 'Gagal menyetujui IRS']);
+    }
+}
+
+public function cancelIrs(Request $request)
+{
+    // Validate the request
+    $request->validate([
+        'nim' => 'required|exists:irs,nim'
+    ]);
+
+    try {
+        // Find and update all IRS records for this NIM to 'pending'
+        DB::table('irs')
+            ->where('nim', $request->nim)
+            ->update([
+                'status' => 'pending',
+                'updated_at' => now()
+            ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'IRS berhasil dibatalkan'
+        ]);
+    } catch (\Exception $e) {
+        // Log the error for debugging
+        Log::error('Cancel IRS Error: ' . $e->getMessage());
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Gagal membatalkan IRS',
+            'error' => $e->getMessage()
+        ], 500);
     }
 }
 
@@ -233,6 +266,52 @@ public function lihatIRS()
 
     // Download PDF
     return $pdf->download("IRS_Semester_{$semester}.pdf");
+}
+
+    // Di IrsController
+    public function getIrsData()
+    {
+        try {
+            // Ambil data IRS untuk user yang sedang login dengan relasi
+            $irsData = Irs::whereHas('mahasiswa.user', function ($query) {
+                $query->where('id', Auth::id()); // Sesuaikan dengan ID user yang sedang login
+            })->with(['jadwal.mataKuliah']) // Menggunakan relasi berjenjang
+            ->get()
+            ->map(function($irs) {
+                return [
+                    'mata_kuliah_id' => $irs->jadwal?->mataKuliah?->id ?? null,
+                    'jadwal_id' => $irs->jadwal_id,
+                    'sks' => $irs->jadwal?->mataKuliah?->sks ?? 0,
+                    'jam_mulai' => $irs->jadwal?->jam_mulai ?? null,
+                    'jam_selesai' => $irs->jadwal?->jam_selesai ?? null,
+                    'hari' => $irs->jadwal?->hari ?? null,
+                ];
+                
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $irsData
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil data IRS',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function checkIRSStatus()
+{
+    $mahasiswa = Auth::user()->mahasiswa;
+    $hasApprovedIRS = Irs::where('nim', $mahasiswa->nim)
+                          ->where('status', 'approved')
+                          ->exists();
+
+    return response()->json([
+        'hasApprovedIRS' => $hasApprovedIRS
+    ]);
 }
 
 }

@@ -47,6 +47,7 @@ class Jadwal extends Model
 
    public function irs()
     {
-        return $this->belongsTo(IRS::class);
+        return $this->hasMany(Irs::class, 'jadwal_id');
     }
+
 }

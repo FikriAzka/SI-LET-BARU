@@ -33,7 +33,7 @@ class MahasiswaSeeder extends Seeder
                 'total_sks' => '90',
                 'status' => 'Aktif',// masih aktif
                 'angkatan' => 2022,
-                'program_studi_id' => 2,
+                'program_studi_id' => 1,
                 'fakultas_id' => 1,
                 'dos_wal_id' => 1, 
             ],
@@ -51,7 +51,7 @@ class MahasiswaSeeder extends Seeder
                 'status' => 'Aktif',// masih aktif
                 'angkatan' => 2023,
                 'no_hp' => '089876543210',
-                'program_studi_id' => 2,
+                'program_studi_id' => 1,
                 'fakultas_id' => 2,
                 'dos_wal_id' => 1,
             ],
@@ -69,7 +69,7 @@ class MahasiswaSeeder extends Seeder
                 'status' => 'Aktif',// masih aktif
                 'angkatan' => 2022,
                 'no_hp' => '089876543210',
-                'program_studi_id' => 2,
+                'program_studi_id' => 1,
                 'fakultas_id' => 2,
                 'dos_wal_id' => 1,
             ],
@@ -87,7 +87,7 @@ class MahasiswaSeeder extends Seeder
                 'status' => 'Aktif',// masih aktif
                 'angkatan' => 2022,
                 'no_hp' => '089876543210',
-                'program_studi_id' => 2,
+                'program_studi_id' => 1,
                 'fakultas_id' => 2,
                 'dos_wal_id' => 1,
             ],
@@ -105,7 +105,7 @@ class MahasiswaSeeder extends Seeder
                 'status' => 'Aktif',// masih aktif
                 'angkatan' => 2022,
                 'no_hp' => '089876543210',
-                'program_studi_id' => 2,
+                'program_studi_id' => 1,
                 'fakultas_id' => 2,
                 'dos_wal_id' => 1,
             ]

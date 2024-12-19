@@ -41,10 +41,13 @@ Route::group(['middleware' => 'auth', 'web'], function () {
     Route::get("/buatIRS-mahasiswa", [JadwalController::class, "buatIRS_mahasiswa"]) -> name('mahasiswa.buatIRS');
     Route::post('/submit-irs', [IrsController::class, 'submitIRS'])->name('irs.submit');
     Route::delete('/irs/{id}', [IRSController::class, 'destroy'])->name('irs.destroy');
-    Route::get('/get-irs-data', [IRSController::class, 'getIrsData']);
+
     Route::get('/get-irs', [IRSController::class, 'getIRS']);
+    Route::get('/get-irs-data', [IrsController::class, 'getIrsData'])->name('get-irs-data');
 
     Route::post('/approve-irs', [IrsController::class, 'approveIrs']);
+    Route::post('/cancel-irs', [IrsController::class, 'cancelIrs']);
+    Route::get('/check-irs-status', [IrsController::class, 'checkIRSStatus'])->name('check.irs.status');
 
 
 
@@ -124,6 +127,13 @@ Route::group(['middleware' => 'auth', 'web'], function () {
     Route::get("/verifikasiIRSpermintaan-dosen", [DosenController::class, "verifikasiIRSpermintaan_dosen"]) -> name('dosen.verifikasiIRS');
     Route::get("/verifikasiIRSSah-dosen", [DosenController::class, "verifikasiIRSdisahkan_dosen"]);
     Route::get("/verifikasiIRSditolak-dosen", [DosenController::class, "verifikasiIRSditolak_dosen"]);
+    Route::get('/get-mahasiswa-irs-status', [DosenController::class, 'getMahasiswaIrsStatus']);
+    Route::get('/irs-detail/{nim}', [DosenController::class, 'show'])->name('irs.detail');
+    Route::get('/get-perwalian', [DosenController::class, 'getPerwalian']);
+    Route::get('/histori-irs/{mahasiswa}', [DosenController::class, 'showIrsMhs'])->name('histori-irs.show');
+
+
+
 
 
     //Akademik

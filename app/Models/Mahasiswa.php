@@ -18,7 +18,7 @@ class Mahasiswa extends Model
 
     public function programStudi()
     {
-        return $this->belongsTo(ProgramStudi::class);
+        return $this->belongsTo(ProgramStudi::class,'jurusan');
     }
 
     public function fakultas()
@@ -28,12 +28,14 @@ class Mahasiswa extends Model
 
     public function doswal()
     {
-        return $this->belongsTo(DosWal::class, 'doswal_id');
+        return $this->belongsTo(DosWal::class, 'dos_wal_id');
     }
 
     
     public function irs()
     {
-        return $this->hasMany(IRS::class, 'nim', 'id'); // 'id' di Mahasiswa, 'nim' di IRS
+        return $this->hasMany(IRS::class, 'nim', 'nim'); // 'id' di Mahasiswa, 'nim' di IRS
     }
+
+    
 }
