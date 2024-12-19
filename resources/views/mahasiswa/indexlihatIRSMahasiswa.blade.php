@@ -78,9 +78,6 @@
                                             <th class="border px-4 py-2 text-left">Mata Kuliah</th>
                                             <th class="border px-4 py-2 text-center w-24">Kode MK</th>
                                             <th class="border px-4 py-2 text-center w-20">SKS</th>
-                                            <th class="border px-4 py-2 text-center w-32">Status</th>
-                                            <th class="border px-4 py-2 text-center w-24">Nilai</th>
-                                            <th class="border px-4 py-2 text-center w-32">Dosen</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -107,6 +104,7 @@
                                                 <td class="border px-4 py-2 text-center">
                                                     {{ $item->jadwal->dosen->nama ?? 'Data tidak tersedia' }}
                                                 </td>
+                                            
                                             </tr>
                                         @endforeach
                                         <tr class="bg-gray-50 font-medium">
