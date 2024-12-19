@@ -46,6 +46,7 @@ Route::group(['middleware' => 'auth', 'web'], function () {
     Route::get('/get-irs-data', [IrsController::class, 'getIrsData'])->name('get-irs-data');
 
     Route::post('/approve-irs', [IrsController::class, 'approveIrs']);
+    Route::get('/mahasiswa/print-irs/{semester}', [IRSController::class, 'printIRS'])->name('mahasiswa.print_irs');    
     Route::post('/cancel-irs', [IrsController::class, 'cancelIrs']);
     Route::get('/check-irs-status', [IrsController::class, 'checkIRSStatus'])->name('check.irs.status');
 

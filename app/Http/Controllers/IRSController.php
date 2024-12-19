@@ -313,5 +313,32 @@ public function lihatIRS()
         'hasApprovedIRS' => $hasApprovedIRS
     ]);
 }
-
+public function printIRS($semester)
+{
+    $mahasiswa = Auth::user()->mahasiswa->load([
+        'programStudi',
+        'doswal.dosen'
+    ]);
+    
+    $irsData = Irs::where('nim', $mahasiswa->nim)
+        ->where('semester', $semester)
+        ->where('status', 'approved')
+        ->with([
+            'jadwal',
+            'jadwal.mataKuliah',
+            'jadwal.dosen'
+        ])
+        ->get();
+            
+    $semesterLabel = $semester % 2 == 1 ? 'Ganjil' : 'Genap';
+    $tahunAkademik = '2024/2025';
+        
+    return view('mahasiswa.print_irs', compact(
+        'mahasiswa',
+        'irsData',
+        'semester',
+        'tahunAkademik',
+        'semesterLabel'
+    ));
+}
 }

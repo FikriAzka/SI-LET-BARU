@@ -92,18 +92,6 @@
                                                 <td class="border px-4 py-2 text-center">
                                                     {{ $item->jadwal->sks ?? '-' }}
                                                 </td>
-                                                <td class="border px-4 py-2 text-center">
-                                                    <span
-                                                        class="px-2 py-1 rounded-full text-sm {{ $item->status_lulus == 'lulus' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                                        {{ $item->status_lulus ?? '-' }}
-                                                    </span>
-                                                </td>
-                                                <td class="border px-4 py-2 text-center">
-                                                    {{ $item->nilai ?? '-' }}
-                                                </td>
-                                                <td class="border px-4 py-2 text-center">
-                                                    {{ $item->jadwal->dosen->nama ?? 'Data tidak tersedia' }}
-                                                </td>
                                             
                                             </tr>
                                         @endforeach
@@ -130,6 +118,14 @@
                         @else
                             <p class="text-center text-gray-500 py-2">Belum ada mata kuliah yang diambil pada semester
                                 ini</p>
+                        @endif
+
+                        @if(isset($irsList[$i]) && $irsList[$i]->count() > 0)
+                            <div class="mt-4 text-center">
+                                <a href="{{ route('mahasiswa.print_irs', ['semester' => $i]) }}" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                                    Cetak IRS
+                                </a>
+                            </div>
                         @endif
                     </div>
                 </div>
